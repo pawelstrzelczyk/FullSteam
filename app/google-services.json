@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "680272280131",
+    "firebase_url": "https://fullsteam-4c6f1-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "fullsteam-4c6f1",
     "storage_bucket": "fullsteam-4c6f1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:680272280131:android:9483c9bc25a8596e3032f6",
+        "mobilesdk_app_id": "1:680272280131:android:f78d41496c8a80803032f6",
         "android_client_info": {
           "package_name": "com.example.fullsteam"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "680272280131-p7ga78rqs7uvj94ardmtgqknbov19jmn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fullsteam",
+            "certificate_hash": "c42f83aa690e06c53b8f23c0c4a9fe7e1e998720"
+          }
+        },
         {
           "client_id": "680272280131-lg254gkjjj85qk5ara4vs2fju5opdho3.apps.googleusercontent.com",
           "client_type": 3
