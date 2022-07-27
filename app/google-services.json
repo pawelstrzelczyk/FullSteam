@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "680272280131",
+    "project_id": "fullsteam-4c6f1",
+    "storage_bucket": "fullsteam-4c6f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680272280131:android:9483c9bc25a8596e3032f6",
+        "android_client_info": {
+          "package_name": "com.example.fullsteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680272280131-lg254gkjjj85qk5ara4vs2fju5opdho3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPHKA3zqRx4qg2rlm-ub79eH0bG8ORrEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680272280131-lg254gkjjj85qk5ara4vs2fju5opdho3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
