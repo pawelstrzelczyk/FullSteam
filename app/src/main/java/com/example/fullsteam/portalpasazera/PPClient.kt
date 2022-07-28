@@ -2,7 +2,6 @@ package com.example.fullsteam.portalpasazera
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.fullsteam.Station
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -22,9 +21,9 @@ class PPClient {
     private val executor = Executors.newSingleThreadExecutor()
 
     fun getStations(stations: List<String>): MutableLiveData<MutableList<List<Station>>> {
-        val directionsRoutes: MutableLiveData<MutableList<List<Station>>> = MutableLiveData()
+        val ppStations: MutableLiveData<MutableList<List<Station>>> = MutableLiveData()
         executor.execute {
-            val directionsRoutesExecutor: MutableList<List<Station>> = arrayListOf()
+            val ppStationsExecutor: MutableList<List<Station>> = arrayListOf()
             stations.forEach { station ->
                 Log.d("station", station)
                 val response = baseURL.httpGet(
@@ -37,13 +36,13 @@ class PPClient {
                     Log.e("response failed", ":((((((((((((((((")
                 }
                 response.success {
-                    directionsRoutesExecutor.add(it)
+                    ppStationsExecutor.add(it)
                 }
             }
-            directionsRoutes.postValue(directionsRoutesExecutor)
+            ppStations.postValue(ppStationsExecutor)
         }
 
-        return directionsRoutes
+        return ppStations
     }
 
 }

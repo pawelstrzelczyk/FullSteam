@@ -9,7 +9,7 @@
 //import android.widget.Filterable
 //import android.widget.TextView
 //import com.example.fullsteam.R
-//import com.example.fullsteam.Station
+//import com.example.fullsteam.portalpasazera.Station
 //
 //class PPAdapter : BaseAdapter(), Filterable {
 //    private final val maxResults = 6
