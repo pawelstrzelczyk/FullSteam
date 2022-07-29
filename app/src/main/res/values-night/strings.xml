@@ -1,10 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Full Steam</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="trip_date">Trip date</string>
     <string name="train_number">train number</string>
-    <string name="number">number</string>
     <string name="name">name</string>
     <string name="train_name">train name</string>
     <string name="train_carrier">train carrier</string>

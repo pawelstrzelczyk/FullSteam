@@ -27,6 +27,7 @@ class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) 
         return p0.toLong()
     }
 
+
     @SuppressLint("Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val brandItem = getItem(position)

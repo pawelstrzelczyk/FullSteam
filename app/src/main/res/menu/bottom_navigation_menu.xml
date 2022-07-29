@@ -4,7 +4,8 @@
         android:id="@+id/main_page"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="main page" />
+        android:title="main page"
+        />
     <item
         android:id="@+id/add_page"
         android:enabled="true"
