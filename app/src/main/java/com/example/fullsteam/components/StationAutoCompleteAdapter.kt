@@ -2,43 +2,30 @@ package com.example.fullsteam.components
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.fullsteam.R
-import com.example.fullsteam.koleo.brands.Brand
 
-
-class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) :
-    ArrayAdapter<Brand>(context, 0, brandList) {
-    override fun getCount(): Int {
-        return brandList.size
-    }
-
-    override fun getItem(p0: Int): Brand {
-        return brandList[p0]
+class StationAutoCompleteAdapter(context: Context, private val stations: ArrayList<String>) :
+    ArrayAdapter<String>(context, 0, stations) {
+    override fun getItem(p0: Int): String {
+        return stations[p0]
     }
 
     override fun getItemId(p0: Int): Long {
         return p0.toLong()
     }
 
-
     @SuppressLint("Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val brandItem = getItem(position)
+        val stationItem = getItem(position)
         val itemView = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.brand_spinner_item, parent, false)
-        brandItem.let {
-            val brandText = itemView.findViewById<TextView>(R.id.train_brand_spinner_item_textview)
-            brandText.text = brandItem.display_name
-            brandText.setTextColor(Color.parseColor(brandItem.color))
-
-        }
+            .inflate(R.layout.station_list_item, parent, false)
+        val stationText = itemView.findViewById<TextView>(R.id.station_name)
+        stationText.text = stationItem
 
         return itemView
     }
@@ -47,5 +34,8 @@ class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) 
         return getView(position, convertView, parent)
     }
 
+    override fun getCount(): Int {
+        return stations.size
+    }
 
 }

@@ -9,7 +9,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="672dp"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
         android:scrollbars="vertical">
 
@@ -36,7 +36,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_calendar_today_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_date_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_123_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/train_number_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -98,7 +98,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_train_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/train_name_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -124,7 +124,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_apartment_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/train_carrier_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -177,11 +177,12 @@
                         app:startIconDrawable="@drawable/ic_baseline_access_time_24">
 
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/trip_start_time_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="time"
+                            android:focusableInTouchMode="false"
                             android:tooltipText="@string/start_time" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -226,11 +227,12 @@
                         app:startIconDrawable="@drawable/ic_baseline_access_time_24">
 
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/trip_end_time_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="time"
+                            android:focusableInTouchMode="false"
                             android:tooltipText="@string/end_time" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -256,7 +258,7 @@
                     app:startIconDrawable="@drawable/ic_baseline_timeline_24">
 
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_distance_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -277,7 +279,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_attach_money_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_price_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -320,7 +322,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_hourglass_top_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_duration_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -339,7 +341,7 @@
                     android:paddingEnd="8dp"
                     app:startIconDrawable="@drawable/ic_baseline_hourglass_disabled_24">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_delay_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -364,11 +366,11 @@
                     android:paddingEnd="8dp">
 
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_avg_speed_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:tooltipText="@string/avg_speed" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -384,7 +386,7 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/trip_price_per_km_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

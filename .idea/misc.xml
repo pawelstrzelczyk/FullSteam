@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.331" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/drawable/main_icon.xml" value="0.3355" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/activity_add_trip.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/brand_spinner_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/currency_spinner_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/fragment_add_trip_form.xml" value="0.2359375" />
+        <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/main_toolbar.xml" value="0.36041666666666666" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/layout/station_list_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.29583333333333334" />
       </map>

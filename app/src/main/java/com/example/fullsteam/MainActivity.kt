@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentContainerView
 import com.example.fullsteam.fragments.AddTripFormFragment
 import com.example.fullsteam.portalpasazera.PPClient
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var priceEditText: EditText
     private lateinit var mainFragmentView: FragmentContainerView
     private lateinit var addFragment: AddTripFormFragment
+    private lateinit var mainToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +42,12 @@ class MainActivity : AppCompatActivity() {
 //        }
         addFragment = AddTripFormFragment()
         setContentView(R.layout.activity_main)
+        mainToolbar = findViewById(R.id.activity_main_toolbar)
+
 
 
         supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, addFragment).commit()
+
 
 //        ppClient = PPClient()
 //

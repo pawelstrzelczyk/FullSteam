@@ -20,12 +20,11 @@ class PPClient {
         "https://portalpasazera.pl/Wyszukiwarka/WyszukajStacje"
     private val executor = Executors.newSingleThreadExecutor()
 
-    fun getStations(stations: List<String>): MutableLiveData<MutableList<List<Station>>> {
+    fun getStations(station: String): MutableLiveData<MutableList<List<Station>>> {
         val ppStations: MutableLiveData<MutableList<List<Station>>> = MutableLiveData()
         executor.execute {
             val ppStationsExecutor: MutableList<List<Station>> = arrayListOf()
-            stations.forEach { station ->
-                Log.d("station", station)
+            station.let { station ->
                 val response = baseURL.httpGet(
                     listOf(
                         Pair("wprowadzonyTekst", station)
