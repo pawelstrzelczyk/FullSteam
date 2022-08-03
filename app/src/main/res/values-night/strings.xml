@@ -20,4 +20,5 @@
     <string name="change">change</string>
     <string name="sleeping_car">sleeping car</string>
     <string name="train_brand">train brand</string>
+    <string name="add_fab">add</string>
 </resources>

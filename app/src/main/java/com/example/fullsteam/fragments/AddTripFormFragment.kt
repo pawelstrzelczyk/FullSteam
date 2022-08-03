@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
+import com.example.fullsteam.FirebaseHandler
 import com.example.fullsteam.R
 import com.example.fullsteam.components.BrandSpinnerAdapter
 import com.example.fullsteam.components.CurrencySpinnerAdapter
@@ -22,11 +24,15 @@ import com.example.fullsteam.koleo.brands.Brand
 import com.example.fullsteam.koleo.carriers.Carrier
 import com.example.fullsteam.portalpasazera.PPClient
 import com.example.fullsteam.portalpasazera.Station
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 
 class AddTripFormFragment : Fragment() {
@@ -51,11 +57,19 @@ class AddTripFormFragment : Fragment() {
     private lateinit var tripAvgSpeedText: TextInputEditText
     private lateinit var tripPricePerKm: TextInputEditText
     private lateinit var tripDelayText: TextInputEditText
-
+    private lateinit var pkmCheckbox: CheckBox
+    private lateinit var bikeCheckBox: CheckBox
+    private lateinit var changeCheckBox: CheckBox
+    private lateinit var sleepingCarCheckBox: CheckBox
+    private lateinit var tripAddFab: ExtendedFloatingActionButton
+    private var selectedBrand: Brand? = null
     private val currencyList: ArrayList<String> = arrayListOf("PLN", "EUR")
     private lateinit var currencySpinner: Spinner
     private lateinit var koleoClient: KoleoClient
+    private lateinit var firebaseHandler: FirebaseHandler
     private lateinit var trainCarrierEditText: EditText
+    private var koleoTrainNumber: Int = 0
+    private var tripDurationSeconds: Long = 0
     private val brandsToPromote: List<String> = listOf(
         "KW",
         "IC",
@@ -74,6 +88,7 @@ class AddTripFormFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         koleoClient = KoleoClient()
+        firebaseHandler = FirebaseHandler()
         super.onCreate(savedInstanceState)
     }
 
@@ -82,7 +97,7 @@ class AddTripFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
-        var selectedBrand: Brand? = Brand()
+
         var selectedStartStation: Station?
         var selectedEndStation: Station?
         var tripDurationSeconds: Long = Long.MAX_VALUE
@@ -105,6 +120,13 @@ class AddTripFormFragment : Fragment() {
         tripAvgSpeedText = fragmentView.findViewById(R.id.trip_avg_speed_text)
         tripPricePerKm = fragmentView.findViewById(R.id.trip_price_per_km_text)
         tripDelayText = fragmentView.findViewById(R.id.trip_delay_text)
+        tripAddFab = fragmentView.findViewById(R.id.trip_add_fab)
+        pkmCheckbox = fragmentView.findViewById(R.id.pkm_checkbox)
+        bikeCheckBox = fragmentView.findViewById(R.id.bike_checkbox)
+        changeCheckBox = fragmentView.findViewById(R.id.change_checkbox)
+        sleepingCarCheckBox = fragmentView.findViewById(R.id.sleeping_car_checkbox)
+        tripDelayText.setText("0", TextView.BufferType.EDITABLE)
+
         var brandAdapter = BrandSpinnerAdapter(
             requireContext(),
             brandsList.sortedBy { it.name })
@@ -274,99 +296,11 @@ class AddTripFormFragment : Fragment() {
                 }
             }
         })
-        var number = 0
 
 
         trainNameEditText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
-                if (tripDateEditText.text.isNotEmpty() && trainNumberEditText.text.isNotEmpty() && trainNameEditText.text?.isNotEmpty() == true && brandSpinner.selectedItem != null) {
-                    selectedBrand?.let { brand ->
-                        koleoClient.getTrainCalendars(
-
-                            brand.name.trim(),
-                            Integer.parseInt(trainNumberEditText.text.toString().trim()),
-                            trainNameEditText.text.toString().trim()
-                        ).observeForever { calendarResponse ->
-
-                            if (calendarResponse.isNotEmpty()) {
-                                number =
-                                    calendarResponse[0].train_calendars[0].date_train_map[tripDateEditText.text.toString()]!!
-
-                                koleoClient.getTrain(number).observeForever {
-                                    if (startAutoCompleteTextView.text.isNotEmpty()) {
-                                        val hour =
-                                            it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.departure?.hour
-                                        val minute =
-                                            it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.departure?.minute
-                                        tripStartTimeText.setText(
-                                            "${String.format("%02d", hour)}:${String.format("%02d", minute)}",
-                                            TextView.BufferType.EDITABLE
-                                        )
-                                    }
-                                    if (endAutoCompleteTextView.text.isNotEmpty()) {
-                                        val hour =
-                                            it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.hour
-                                        val minute =
-                                            it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.minute
-                                        tripEndTimeText.setText(
-                                            "${String.format("%02d", hour)}:${String.format("%02d", hour)}",
-                                            TextView.BufferType.EDITABLE
-                                        )
-                                    }
-                                    if (startAutoCompleteTextView.text.isNotEmpty() && endAutoCompleteTextView.text.isNotEmpty()) {
-                                        val startTime = tripStartTimeText.text.toString()
-                                        val endTime = tripEndTimeText.text.toString()
-                                        val startDistance =
-                                            it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.distance!!
-                                        val endDistance =
-                                            it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.distance!!
-
-                                        tripDurationSeconds =
-                                            Duration.ofSeconds(
-                                                LocalTime.parse(startTime).until(
-                                                    LocalTime.parse(endTime),
-                                                    ChronoUnit.SECONDS
-                                                )
-                                            ).seconds
-
-                                        tripDurationText.setText(
-                                            LocalTime.MIN.plus(
-                                                Duration.ofMinutes(
-                                                    LocalTime.parse(startTime).until(
-                                                        LocalTime.parse(endTime),
-                                                        ChronoUnit.MINUTES
-                                                    )
-                                                )
-                                            ).toString(),
-                                            TextView.BufferType.EDITABLE
-
-                                        )
-
-                                        tripDistanceText.setText(
-                                            (endDistance / 1000 - startDistance / 1000).toString(),
-                                            TextView.BufferType.EDITABLE
-                                        )
-
-                                        tripAvgSpeedText.setText(
-                                            ((endDistance - startDistance) /
-                                                    LocalTime.parse(startTime).until(
-                                                        LocalTime.parse(endTime),
-                                                        ChronoUnit.SECONDS
-                                                    ) * 3.6).toString(),
-                                            TextView.BufferType.EDITABLE
-                                        )
-                                    }
-
-
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-
-
+                getTrainData()
             }
         }
         tripPriceText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
@@ -382,38 +316,97 @@ class AddTripFormFragment : Fragment() {
 
         }
         tripDelayText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                getTrainData()
+            }
+
             if (!hasFocus) {
-                if (!tripDelayText.text.isNullOrEmpty()){
-                    tripDurationSeconds += tripDelayText.text.toString().toLong() * 60
-                    tripEndTimeText.setText(
-                        LocalTime.parse(tripEndTimeText.text.toString())
-                            .plus(Duration.ofMinutes(tripDelayText.text.toString().toLong()))
-                            .toString(),
-                        TextView.BufferType.EDITABLE
-                    )
-                    tripDurationText.setText(
-                        LocalTime.MIN.plus(
-                            Duration.ofMinutes(
-                                LocalTime.parse(tripStartTimeText.text.toString()).until(
-                                    LocalTime.parse(tripEndTimeText.text.toString()),
-                                    ChronoUnit.MINUTES
+                if (tripDelayText.text.toString().isNotEmpty()) {
+                    tripDurationSeconds = tripDelayText.text.toString().toLong() * 60
+                    Log.d("tripDurationSeconds", tripDurationSeconds.toString())
+                    try {
+                        tripEndTimeText.setText(
+                            LocalTime.parse(tripEndTimeText.text.toString())
+                                .plus(Duration.ofSeconds(tripDurationSeconds))
+                                .toString(),
+                            TextView.BufferType.EDITABLE
+                        )
+                        tripDurationText.setText(
+                            LocalTime.MIN.plus(
+                                Duration.ofMinutes(
+                                    LocalTime.parse(tripStartTimeText.text.toString()).until(
+                                        LocalTime.parse(tripEndTimeText.text.toString()),
+                                        ChronoUnit.MINUTES
+                                    )
                                 )
-                            )
-                        ).toString(),
-                        TextView.BufferType.EDITABLE
-                    )
+                            ).toString(),
+                            TextView.BufferType.EDITABLE
+                        )
+                    } catch (e: DateTimeParseException) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Cannot change arrival time when it's empty!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
                     if (tripDistanceText.text?.isNotEmpty() == true && tripDurationText.text?.isNotEmpty() == true) {
                         tripAvgSpeedText.setText(
                             (tripDistanceText.text.toString().toDouble() * 1000 /
-                                    tripDurationSeconds * 3.6).toString(),
+                                    Duration.ofSeconds(
+                                        LocalTime.MIN.until(
+                                            LocalTime.parse(
+                                                tripDurationText.text.toString()
+                                            ), ChronoUnit.SECONDS
+                                        )
+                                    ).seconds * 3.6).toString(),
                             TextView.BufferType.EDITABLE
                         )
                     }
+                } else {
+                    tripDelayText.setText(
+                        "0",
+                        TextView.BufferType.EDITABLE
+                    )
+                    tripDelayText.setSelection(tripDelayText.length())
                 }
 
 
             }
+        }
 
+        tripAddFab.setOnClickListener {
+            runBlocking {
+                async {
+                    firebaseHandler.addTrip(
+                        requireContext(),
+
+                        tripDateEditText.text.toString(),
+                        selectedBrand?.name.toString(),
+                        trainNumberEditText.text.toString().toInt(),
+                        trainNameEditText.text.toString(),
+                        trainCarrierEditText.text.toString(),
+                        startAutoCompleteTextView.text.toString(),
+                        endAutoCompleteTextView.text.toString(),
+                        tripDistanceText.text.toString().toInt(),
+                        LocalTime.MIN.until(
+                            LocalTime.parse(tripDurationText.text.toString()),
+                            ChronoUnit.MINUTES
+                        ).toInt(),
+                        tripPriceText.text.toString().toDouble(),
+                        tripPricePerKm.text.toString().toDouble(),
+                        tripAvgSpeedText.text.toString().toDouble(),
+                        changeCheckBox.isChecked,
+                        bikeCheckBox.isChecked,
+                        pkmCheckbox.isChecked,
+                        sleepingCarCheckBox.isChecked,
+                        tripDelayText.text.toString().toInt(),
+                        ""
+
+
+                    )
+                }.await()
+            }
         }
         return fragmentView
 
@@ -422,5 +415,110 @@ class AddTripFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
+    }
+
+
+    private fun getTrainData() {
+        if (tripDateEditText.text.isNotEmpty() && trainNumberEditText.text.isNotEmpty() && trainNameEditText.text?.isNotEmpty() == true && brandSpinner.selectedItem != null) {
+            selectedBrand?.let { brand ->
+                koleoClient.getTrainCalendars(
+
+                    brand.name.trim(),
+                    Integer.parseInt(trainNumberEditText.text.toString().trim()),
+                    trainNameEditText.text.toString().trim()
+                ).observeForever { calendarResponse ->
+
+                    if (calendarResponse.isNotEmpty()) {
+                        koleoTrainNumber =
+                            calendarResponse[0].train_calendars[0].date_train_map[tripDateEditText.text.toString()]!!
+
+                        koleoClient.getTrain(koleoTrainNumber).observeForever {
+                            if (startAutoCompleteTextView.text.isNotEmpty()) {
+                                val hour =
+                                    it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.departure?.hour
+                                val minute =
+                                    it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.departure?.minute
+                                tripStartTimeText.setText(
+                                    buildString {
+                                        append(String.format("%02d", hour))
+                                        append(":")
+                                        append(
+                                            String.format(
+                                                "%02d",
+                                                minute
+                                            )
+                                        )
+                                    },
+                                    TextView.BufferType.EDITABLE
+                                )
+                            }
+                            if (endAutoCompleteTextView.text.isNotEmpty()) {
+                                val hour =
+                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.hour
+                                val minute =
+                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.minute
+                                tripEndTimeText.setText(
+                                    "${String.format("%02d", hour)}:${
+                                        String.format(
+                                            "%02d",
+                                            minute
+                                        )
+                                    }",
+                                    TextView.BufferType.EDITABLE
+                                )
+                            }
+                            if (startAutoCompleteTextView.text.isNotEmpty() && endAutoCompleteTextView.text.isNotEmpty()) {
+                                val startTime = tripStartTimeText.text.toString()
+                                val endTime = tripEndTimeText.text.toString()
+                                val startDistance =
+                                    it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.distance!!
+                                val endDistance =
+                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.distance!!
+
+                                val totalDistance = endDistance - startDistance
+
+                                tripDurationSeconds =
+                                    Duration.ofSeconds(
+                                        LocalTime.parse(startTime).until(
+                                            LocalTime.parse(endTime),
+                                            ChronoUnit.SECONDS
+                                        )
+                                    ).seconds
+
+                                tripDurationText.setText(
+                                    LocalTime.MIN.plus(
+                                        Duration.ofMinutes(
+                                            LocalTime.parse(startTime).until(
+                                                LocalTime.parse(endTime),
+                                                ChronoUnit.MINUTES
+                                            )
+                                        )
+                                    ).toString(),
+                                    TextView.BufferType.EDITABLE
+
+                                )
+
+                                tripDistanceText.setText(
+                                    (totalDistance / 1000).toString(),
+                                    TextView.BufferType.EDITABLE
+                                )
+
+                                tripAvgSpeedText.setText(
+                                    ((totalDistance).toDouble() /
+                                            LocalTime.parse(startTime).until(
+                                                LocalTime.parse(endTime),
+                                                ChronoUnit.SECONDS
+                                            ) * 3.6).toString(),
+                                    TextView.BufferType.EDITABLE
+                                )
+                                tripDelayText.setText("0", TextView.BufferType.EDITABLE)
+                                tripDelayText.setSelection(tripDelayText.length())
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

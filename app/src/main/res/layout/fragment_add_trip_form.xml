@@ -181,8 +181,8 @@
                             android:id="@+id/trip_start_time_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:inputType="time"
                             android:focusableInTouchMode="false"
+                            android:inputType="time"
                             android:tooltipText="@string/start_time" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -231,8 +231,8 @@
                             android:id="@+id/trip_end_time_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:inputType="time"
                             android:focusableInTouchMode="false"
+                            android:inputType="time"
                             android:tooltipText="@string/end_time" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -405,24 +405,28 @@
                 android:paddingEnd="8dp">
 
                 <CheckBox
+                    android:id="@+id/pkm_checkbox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:checked="false"
                     android:text="@string/pkm" />
 
                 <CheckBox
+                    android:id="@+id/bike_checkbox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:checked="false"
                     android:text="@string/bike" />
 
                 <CheckBox
+                    android:id="@+id/change_checkbox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:checked="false"
                     android:text="@string/change" />
 
                 <CheckBox
+                    android:id="@+id/sleeping_car_checkbox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:checked="false"
@@ -431,6 +435,18 @@
 
             </LinearLayout>
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/trip_add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:drawableEnd="@drawable/ic_baseline_add_24"
+        android:text="@string/add_fab"
+        android:textAlignment="textEnd"/>
 
 </FrameLayout>

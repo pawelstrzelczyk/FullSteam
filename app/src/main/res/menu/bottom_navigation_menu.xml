@@ -15,6 +15,7 @@
         android:id="@+id/list_page"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_list_24"
-        android:title="list page" />
+        android:title="list page"
+        />
 
 </menu>
