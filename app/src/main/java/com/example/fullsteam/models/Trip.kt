@@ -34,6 +34,9 @@ data class Trip(
     @get: PropertyName("price")
     @set: PropertyName("price")
     var price: Double=0.0,
+    @get: PropertyName("currency")
+    @set: PropertyName("currency")
+    var currency: String="",
     @get: PropertyName("pricePerKm")
     @set: PropertyName("pricePerKm")
     var pricePerKm: Double=0.0,
@@ -86,6 +89,7 @@ data class Trip(
         json["isSleepingCar"] = isSleepingCar
         json["delay"] = delay
         json["comment"] = comment
+        json["currency"] = currency
         return json
     }
 }

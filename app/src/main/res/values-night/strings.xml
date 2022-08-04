@@ -21,4 +21,7 @@
     <string name="sleeping_car">sleeping car</string>
     <string name="train_brand">train brand</string>
     <string name="add_fab">add</string>
+    <string name="arrow">arrow</string>
+    <string name="add_trip">add trip</string>
+    <string name="trip_list">trip list</string>
 </resources>

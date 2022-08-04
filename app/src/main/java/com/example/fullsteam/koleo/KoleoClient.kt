@@ -1,7 +1,7 @@
 package com.example.fullsteam.koleo
 
+import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.fullsteam.koleo.brands.BrandsResponse
 import com.example.fullsteam.koleo.carriers.CarriersResponse
@@ -18,7 +18,6 @@ import com.github.kittinunf.fuel.jackson.responseObject
 import com.github.kittinunf.result.onError
 import com.github.kittinunf.result.success
 import java.util.concurrent.Executors
-import kotlin.coroutines.coroutineContext
 
 class KoleoClient {
     private val mapper =
@@ -74,6 +73,7 @@ class KoleoClient {
     }
 
     fun getTrainCalendars(
+        context: Context,
         brand: String,
         nr: Number,
         name: String
@@ -92,7 +92,12 @@ class KoleoClient {
                 ).responseObject<TrainCalendarsResponse>(mapper).third
 
             response.onError {
-                Log.e("response failed", ":((((((((((((((((")
+                try {
+                    Log.e("response failed", ":((((((((((((((((")
+                } catch (e: FuelError) {
+
+                }
+
             }
             response.success {
                 ppStationsExecutor.add(it)
@@ -103,12 +108,11 @@ class KoleoClient {
         return trainCalendars
     }
 
-    fun getTrain(id: Int): MutableLiveData<MutableList<TrainResponse>> {
+    fun getTrain(context: Context, id: Int): MutableLiveData<MutableList<TrainResponse>> {
         val train: MutableLiveData<MutableList<TrainResponse>> =
             MutableLiveData()
         executor.execute {
             val ppStationsExecutor: MutableList<TrainResponse> = arrayListOf()
-            Log.d("id", id.toString())
 
             val response =
                 "/trains/$id".httpGet().responseObject<TrainResponse>(mapper).third
@@ -116,7 +120,7 @@ class KoleoClient {
             response.onError {
                 try {
                     Log.e("response failed", ":((((((((((((((((")
-                } catch (e: FuelError){
+                } catch (e: FuelError) {
 
                 }
 

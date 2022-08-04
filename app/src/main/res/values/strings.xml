@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="trip_date">Trip date</string>
     <string name="train_number">train number</string>
-    <string name="number">number</string>
+    <string name="number" translatable="true">number</string>
     <string name="name">name</string>
     <string name="train_name">train name</string>
     <string name="train_carrier">train carrier</string>
@@ -24,4 +24,7 @@
     <string name="sleeping_car">sleeping car</string>
     <string name="train_brand">train brand</string>
     <string name="add_fab">add</string>
+    <string name="arrow">arrow</string>
+    <string name="add_trip">add trip</string>
+    <string name="trip_list">trip list</string>
 </resources>

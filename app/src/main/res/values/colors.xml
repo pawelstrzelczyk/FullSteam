@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="swipeToDelete">#AF0000</color>
+    <color name="ppMain">#004d84</color>
+    <color name="ppButton">#007bc7</color>
 </resources>

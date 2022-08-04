@@ -13,11 +13,16 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentContainerView
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.fullsteam.fragments.AddTripFormFragment
 import com.example.fullsteam.fragments.TripListFragment
 import com.example.fullsteam.portalpasazera.PPClient
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.NumberFormat
@@ -32,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addFragment: AddTripFormFragment
     private lateinit var listFragment: TripListFragment
     private lateinit var mainToolbar: Toolbar
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,15 +48,12 @@ class MainActivity : AppCompatActivity() {
 //            it.systemBarsBehavior =
 //                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 //        }
-        addFragment = AddTripFormFragment()
-        listFragment = TripListFragment()
         setContentView(R.layout.activity_main)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
         mainToolbar = findViewById(R.id.activity_main_toolbar)
-
-
-
-        supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, listFragment)
-            .commit()
+        bottomNavigationView = findViewById(R.id.bottom_navigation_bar)
+        bottomNavigationView.setupWithNavController(navController)
 
 
     }

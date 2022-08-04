@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/main_page"
+        android:id="@+id/mainFragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="main page"
-        />
+        android:title="main page" />
     <item
-        android:id="@+id/add_page"
+        android:id="@+id/addTripFormFragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_add_24"
-        android:title="add page" />
+        android:title="@string/add_trip" />
     <item
-        android:id="@+id/list_page"
+        android:id="@+id/tripListFragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_list_24"
-        android:title="list page"
-        />
+        android:title="@string/trip_list" />
 
 </menu>

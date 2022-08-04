@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.FullSteam" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/ppButton</item>
+        <item name="colorPrimaryVariant">@color/ppMain</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-<!--        <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Material3.MaterialTimePicker</item>-->
+        <!--        <item name="android:timePickerDialogTheme">@style/ThemeOverlay.Material3.MaterialTimePicker</item>-->
         <!-- Customize your theme here. -->
     </style>
 </resources>

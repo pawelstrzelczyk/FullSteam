@@ -394,6 +394,7 @@ class AddTripFormFragment : Fragment() {
                             ChronoUnit.MINUTES
                         ).toInt(),
                         tripPriceText.text.toString().toDouble(),
+                        currencySpinner.selectedItem.toString(),
                         tripPricePerKm.text.toString().toDouble(),
                         tripAvgSpeedText.text.toString().toDouble(),
                         changeCheckBox.isChecked,
@@ -407,6 +408,7 @@ class AddTripFormFragment : Fragment() {
                     )
                 }.await()
             }
+
         }
         return fragmentView
 
@@ -422,7 +424,7 @@ class AddTripFormFragment : Fragment() {
         if (tripDateEditText.text.isNotEmpty() && trainNumberEditText.text.isNotEmpty() && trainNameEditText.text?.isNotEmpty() == true && brandSpinner.selectedItem != null) {
             selectedBrand?.let { brand ->
                 koleoClient.getTrainCalendars(
-
+                    requireContext(),
                     brand.name.trim(),
                     Integer.parseInt(trainNumberEditText.text.toString().trim()),
                     trainNameEditText.text.toString().trim()
@@ -432,7 +434,7 @@ class AddTripFormFragment : Fragment() {
                         koleoTrainNumber =
                             calendarResponse[0].train_calendars[0].date_train_map[tripDateEditText.text.toString()]!!
 
-                        koleoClient.getTrain(koleoTrainNumber).observeForever {
+                        koleoClient.getTrain(requireContext(), koleoTrainNumber).observeForever {
                             if (startAutoCompleteTextView.text.isNotEmpty()) {
                                 val hour =
                                     it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.departure?.hour
