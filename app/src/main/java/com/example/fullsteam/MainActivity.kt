@@ -1,31 +1,20 @@
 package com.example.fullsteam
 
-import android.content.ContentValues.TAG
-import android.content.res.Configuration
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentContainerView
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.fullsteam.fragments.AddTripFormFragment
 import com.example.fullsteam.fragments.TripListFragment
 import com.example.fullsteam.portalpasazera.PPClient
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import java.text.NumberFormat
+import com.google.firebase.storage.FirebaseStorage
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listFragment: TripListFragment
     private lateinit var mainToolbar: Toolbar
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var imageToolbar: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +39,26 @@ class MainActivity : AppCompatActivity() {
 //                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 //        }
         setContentView(R.layout.activity_main)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         mainToolbar = findViewById(R.id.activity_main_toolbar)
+        imageToolbar = findViewById(R.id.main_options_icon)
+//        val storageReference = FirebaseStorage.getInstance().reference.child("train_pics")
+        val storageReference = FirebaseStorage.getInstance().reference.child("train_pics")
+//        val imageReference = storageReference.child("train_pic_1.jpg")
+        val imageReference = storageReference.child("train_pic_1.jpg")
+        Log.d("dupa", imageReference.toString())
+
+
+
+        //GlideApp.with(this).load(imageReference).into(imageToolbar)
+
+        setSupportActionBar(mainToolbar)
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar)
         bottomNavigationView.setupWithNavController(navController)
 
 
     }
-
 
 }

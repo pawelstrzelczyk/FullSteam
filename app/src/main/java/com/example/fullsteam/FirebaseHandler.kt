@@ -1,15 +1,17 @@
 package com.example.fullsteam
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.fullsteam.models.Trip
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class FirebaseHandler {
-    val database = FirebaseFirestore.getInstance()
+    private val database = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
     private val trips: ArrayList<Trip> = arrayListOf()
     fun addTrip(
         context: Context,
@@ -80,32 +82,5 @@ class FirebaseHandler {
             }
     }
 
-
-    fun getTrips() {
-        database.collection("trips").get().addOnSuccessListener { documents ->
-//                Toast.makeText(
-//                    context,
-//                    "Downloaded trips!",
-//                    Toast.LENGTH_LONG
-//                ).show()
-            Log.w(
-                ContentValues.TAG,
-                "Downloaded documents! ${documents.size()}"
-            )
-            for (document in documents) {
-                val obj = document.toObject(Trip::class.java)
-                trips.add(obj.copy())
-            }
-
-        }.addOnFailureListener { e ->
-            Log.w(
-                ContentValues.TAG,
-                "Error downloading documents:c",
-                e
-            )
-        }.addOnSuccessListener {
-
-        }
-    }
 
 }

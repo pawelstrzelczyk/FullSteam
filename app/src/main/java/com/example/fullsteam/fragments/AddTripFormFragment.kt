@@ -26,8 +26,9 @@ import com.example.fullsteam.portalpasazera.PPClient
 import com.example.fullsteam.portalpasazera.Station
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -61,6 +62,7 @@ class AddTripFormFragment : Fragment() {
     private lateinit var bikeCheckBox: CheckBox
     private lateinit var changeCheckBox: CheckBox
     private lateinit var sleepingCarCheckBox: CheckBox
+    private lateinit var commentEditText: TextInputEditText
     private lateinit var tripAddFab: ExtendedFloatingActionButton
     private var selectedBrand: Brand? = null
     private val currencyList: ArrayList<String> = arrayListOf("PLN", "EUR")
@@ -125,6 +127,7 @@ class AddTripFormFragment : Fragment() {
         bikeCheckBox = fragmentView.findViewById(R.id.bike_checkbox)
         changeCheckBox = fragmentView.findViewById(R.id.change_checkbox)
         sleepingCarCheckBox = fragmentView.findViewById(R.id.sleeping_car_checkbox)
+        commentEditText = fragmentView.findViewById(R.id.trip_comment_text)
         tripDelayText.setText("0", TextView.BufferType.EDITABLE)
 
         var brandAdapter = BrandSpinnerAdapter(
@@ -307,8 +310,12 @@ class AddTripFormFragment : Fragment() {
             if (!hasFocus) {
                 if (tripDistanceText.text?.isNotEmpty() == true && tripPriceText.text?.isNotEmpty() == true) {
                     tripPricePerKm.setText(
-                        (tripPriceText.text.toString().toDouble() / tripDistanceText.text.toString()
-                            .toDouble()).toString(),
+                        String.format(
+                            "%.2f",
+                            (tripPriceText.text.toString()
+                                .toDouble() / tripDistanceText.text.toString()
+                                .toDouble())
+                        ),
                         TextView.BufferType.EDITABLE
                     )
                 }
@@ -352,14 +359,16 @@ class AddTripFormFragment : Fragment() {
 
                     if (tripDistanceText.text?.isNotEmpty() == true && tripDurationText.text?.isNotEmpty() == true) {
                         tripAvgSpeedText.setText(
-                            (tripDistanceText.text.toString().toDouble() * 1000 /
-                                    Duration.ofSeconds(
-                                        LocalTime.MIN.until(
-                                            LocalTime.parse(
-                                                tripDurationText.text.toString()
-                                            ), ChronoUnit.SECONDS
-                                        )
-                                    ).seconds * 3.6).toString(),
+                            String.format(
+                                "%.2f", (tripDistanceText.text.toString().toDouble() * 1000 /
+                                        Duration.ofSeconds(
+                                            LocalTime.MIN.until(
+                                                LocalTime.parse(
+                                                    tripDurationText.text.toString()
+                                                ), ChronoUnit.SECONDS
+                                            )
+                                        ).seconds * 3.6)
+                            ),
                             TextView.BufferType.EDITABLE
                         )
                     }
@@ -377,7 +386,7 @@ class AddTripFormFragment : Fragment() {
 
         tripAddFab.setOnClickListener {
             runBlocking {
-                async {
+                withContext(Dispatchers.Default) {
                     firebaseHandler.addTrip(
                         requireContext(),
 
@@ -402,11 +411,11 @@ class AddTripFormFragment : Fragment() {
                         pkmCheckbox.isChecked,
                         sleepingCarCheckBox.isChecked,
                         tripDelayText.text.toString().toInt(),
-                        ""
+                        commentEditText.text.toString()
 
 
                     )
-                }.await()
+                }
             }
 
         }
@@ -506,11 +515,13 @@ class AddTripFormFragment : Fragment() {
                                 )
 
                                 tripAvgSpeedText.setText(
-                                    ((totalDistance).toDouble() /
-                                            LocalTime.parse(startTime).until(
-                                                LocalTime.parse(endTime),
-                                                ChronoUnit.SECONDS
-                                            ) * 3.6).toString(),
+                                    String.format(
+                                        "%.2f", (totalDistance.toDouble() /
+                                                LocalTime.parse(startTime).until(
+                                                    LocalTime.parse(endTime),
+                                                    ChronoUnit.SECONDS
+                                                ) * 3.6)
+                                    ),
                                     TextView.BufferType.EDITABLE
                                 )
                                 tripDelayText.setText("0", TextView.BufferType.EDITABLE)

@@ -7,7 +7,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:checkable="true"
-
+    android:background="@color/cardview_light_background"
     android:clickable="true"
     app:cardCornerRadius="12dp"
     app:cardElevation="8dp">

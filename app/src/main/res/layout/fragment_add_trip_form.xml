@@ -400,40 +400,68 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:paddingStart="8dp"
-                android:paddingEnd="8dp">
+                android:paddingEnd="8dp"
+                android:paddingBottom="64dp">
 
-                <CheckBox
-                    android:id="@+id/pkm_checkbox"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:paddingEnd="8dp">
+
+                    <CheckBox
+                        android:id="@+id/pkm_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="@string/pkm" />
+
+                    <CheckBox
+                        android:id="@+id/bike_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="@string/bike" />
+
+                    <CheckBox
+                        android:id="@+id/change_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="@string/change" />
+
+                    <CheckBox
+                        android:id="@+id/sleeping_car_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="@string/sleeping_car" />
+
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/trip_comment_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="@string/pkm" />
+                    android:layout_weight="1"
+                    android:hint="@string/comment"
+                    android:paddingStart="8dp">
 
-                <CheckBox
-                    android:id="@+id/bike_checkbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="@string/bike" />
-
-                <CheckBox
-                    android:id="@+id/change_checkbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="@string/change" />
-
-                <CheckBox
-                    android:id="@+id/sleeping_car_checkbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="@string/sleeping_car" />
-
-
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/trip_comment_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textMultiLine"
+                        android:tooltipText="@string/comment" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -447,6 +475,6 @@
         android:layout_marginBottom="16dp"
         android:drawableEnd="@drawable/ic_baseline_add_24"
         android:text="@string/add_fab"
-        android:textAlignment="textEnd"/>
+        android:textAlignment="textEnd" />
 
 </FrameLayout>

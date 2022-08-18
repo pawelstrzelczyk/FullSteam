@@ -24,4 +24,5 @@
     <string name="arrow">arrow</string>
     <string name="add_trip">add trip</string>
     <string name="trip_list">trip list</string>
+    <string name="comment">comment</string>
 </resources>
