@@ -465,6 +465,15 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:contentDescription="@string/add_image_button"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:id="@+id/add_image_fab"
+        android:src="@drawable/ic_baseline_photo_camera_24"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/trip_add_fab"

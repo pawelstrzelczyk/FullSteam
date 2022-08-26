@@ -14,6 +14,7 @@ import com.example.fullsteam.fragments.AddTripFormFragment
 import com.example.fullsteam.fragments.TripListFragment
 import com.example.fullsteam.portalpasazera.PPClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.storage.FirebaseStorage
 
 
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainToolbar: Toolbar
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var imageToolbar: ImageView
+    private lateinit var addPhotoFab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +46,9 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         mainToolbar = findViewById(R.id.activity_main_toolbar)
         imageToolbar = findViewById(R.id.main_options_icon)
-//        val storageReference = FirebaseStorage.getInstance().reference.child("train_pics")
         val storageReference = FirebaseStorage.getInstance().reference.child("train_pics")
-//        val imageReference = storageReference.child("train_pic_1.jpg")
         val imageReference = storageReference.child("train_pic_1.jpg")
-        Log.d("dupa", imageReference.toString())
 
-
-
-        //GlideApp.with(this).load(imageReference).into(imageToolbar)
 
         setSupportActionBar(mainToolbar)
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar)

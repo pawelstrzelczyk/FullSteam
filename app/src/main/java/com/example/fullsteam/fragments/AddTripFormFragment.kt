@@ -2,6 +2,9 @@ package com.example.fullsteam.fragments
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.Editable
@@ -14,7 +17,8 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
-import com.example.fullsteam.FirebaseHandler
+import com.example.fullsteam.AddPhotoActivity
+import com.example.fullsteam.firebase.FirebaseHandler
 import com.example.fullsteam.R
 import com.example.fullsteam.components.BrandSpinnerAdapter
 import com.example.fullsteam.components.CurrencySpinnerAdapter
@@ -25,7 +29,9 @@ import com.example.fullsteam.koleo.carriers.Carrier
 import com.example.fullsteam.portalpasazera.PPClient
 import com.example.fullsteam.portalpasazera.Station
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -35,6 +41,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 class AddTripFormFragment : Fragment() {
     private lateinit var datePickerDialog: DatePickerDialog
@@ -64,6 +71,7 @@ class AddTripFormFragment : Fragment() {
     private lateinit var sleepingCarCheckBox: CheckBox
     private lateinit var commentEditText: TextInputEditText
     private lateinit var tripAddFab: ExtendedFloatingActionButton
+    private lateinit var photoAddFab: FloatingActionButton
     private var selectedBrand: Brand? = null
     private val currencyList: ArrayList<String> = arrayListOf("PLN", "EUR")
     private lateinit var currencySpinner: Spinner
@@ -72,6 +80,9 @@ class AddTripFormFragment : Fragment() {
     private lateinit var trainCarrierEditText: EditText
     private var koleoTrainNumber: Int = 0
     private var tripDurationSeconds: Long = 0
+    private var database = FirebaseFirestore.getInstance()
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var uId: String
     private val brandsToPromote: List<String> = listOf(
         "KW",
         "IC",
@@ -89,17 +100,25 @@ class AddTripFormFragment : Fragment() {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         koleoClient = KoleoClient()
         firebaseHandler = FirebaseHandler()
-        super.onCreate(savedInstanceState)
+        sharedPref = requireActivity().getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        )
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
 
+        uId = sharedPref.getString(
+            getString(R.string.firebase_user_uid),
+            "uid could not be retrieved"
+        ).toString()
+        val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
+        val toSaveDocumentId = database.collection("users").document(uId).collection("trips").document().id
         var selectedStartStation: Station?
         var selectedEndStation: Station?
         var tripDurationSeconds: Long = Long.MAX_VALUE
@@ -127,8 +146,11 @@ class AddTripFormFragment : Fragment() {
         bikeCheckBox = fragmentView.findViewById(R.id.bike_checkbox)
         changeCheckBox = fragmentView.findViewById(R.id.change_checkbox)
         sleepingCarCheckBox = fragmentView.findViewById(R.id.sleeping_car_checkbox)
+        photoAddFab = fragmentView.findViewById(R.id.add_image_fab)
         commentEditText = fragmentView.findViewById(R.id.trip_comment_text)
         tripDelayText.setText("0", TextView.BufferType.EDITABLE)
+
+
 
         var brandAdapter = BrandSpinnerAdapter(
             requireContext(),
@@ -311,6 +333,7 @@ class AddTripFormFragment : Fragment() {
                 if (tripDistanceText.text?.isNotEmpty() == true && tripPriceText.text?.isNotEmpty() == true) {
                     tripPricePerKm.setText(
                         String.format(
+                            Locale.US,
                             "%.2f",
                             (tripPriceText.text.toString()
                                 .toDouble() / tripDistanceText.text.toString()
@@ -360,6 +383,7 @@ class AddTripFormFragment : Fragment() {
                     if (tripDistanceText.text?.isNotEmpty() == true && tripDurationText.text?.isNotEmpty() == true) {
                         tripAvgSpeedText.setText(
                             String.format(
+                                Locale.US,
                                 "%.2f", (tripDistanceText.text.toString().toDouble() * 1000 /
                                         Duration.ofSeconds(
                                             LocalTime.MIN.until(
@@ -388,8 +412,9 @@ class AddTripFormFragment : Fragment() {
             runBlocking {
                 withContext(Dispatchers.Default) {
                     firebaseHandler.addTrip(
+                        uId,
+                        toSaveDocumentId,
                         requireContext(),
-
                         tripDateEditText.text.toString(),
                         selectedBrand?.name.toString(),
                         trainNumberEditText.text.toString().toInt(),
@@ -418,6 +443,13 @@ class AddTripFormFragment : Fragment() {
                 }
             }
 
+        }
+
+
+        photoAddFab.setOnClickListener {
+            val intent = Intent(requireContext(), AddPhotoActivity::class.java)
+            intent.putExtra("documentId", toSaveDocumentId)
+            startActivity(intent)
         }
         return fragmentView
 
@@ -478,13 +510,40 @@ class AddTripFormFragment : Fragment() {
                                     TextView.BufferType.EDITABLE
                                 )
                             }
-                            if (startAutoCompleteTextView.text.isNotEmpty() && endAutoCompleteTextView.text.isNotEmpty()) {
+                            if (startAutoCompleteTextView.text.isNotEmpty() && endAutoCompleteTextView.text.isNotEmpty() &&
+                                tripStartTimeText.text?.matches(Regex("^[0-9]{1,2}:[0-9]{2}$")) == true &&
+                                tripEndTimeText.text?.matches(Regex("^[0-9]{1,2}:[0-9]{2}$")) == true
+                            ) {
                                 val startTime = tripStartTimeText.text.toString()
                                 val endTime = tripEndTimeText.text.toString()
-                                val startDistance =
-                                    it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.distance!!
-                                val endDistance =
-                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.distance!!
+                                var startDistance = 0
+                                var endDistance = 0
+                                try {
+                                    startDistance =
+                                        it[0].stops.find { stop -> stop.station_name == startAutoCompleteTextView.text.toString() }?.distance!!
+                                } catch (
+                                    e: NullPointerException
+                                ) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Train does not stop on this station",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                                try {
+
+                                    endDistance =
+                                        it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.distance!!
+                                } catch (
+                                    e: NullPointerException
+                                ) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Train does not stop on this station",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+
 
                                 val totalDistance = endDistance - startDistance
 
@@ -516,6 +575,7 @@ class AddTripFormFragment : Fragment() {
 
                                 tripAvgSpeedText.setText(
                                     String.format(
+                                        Locale.US,
                                         "%.2f", (totalDistance.toDouble() /
                                                 LocalTime.parse(startTime).until(
                                                     LocalTime.parse(endTime),

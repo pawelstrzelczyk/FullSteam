@@ -3,12 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.311" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/activity_login.xml" value="0.4257246376811594" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/activity_main.xml" value="0.27445652173913043" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_add_photo.xml" value="0.2994791666666667" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_add_trip_form.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_main.xml" value="0.27445652173913043" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_trip_details.xml" value="0.3109375" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_trip_element.xml" value="0.2390625" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_trip_list.xml" value="0.2390625" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/mipmap-anydpi-v26/full_steam_launcher_icon.xml" value="0.311" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/mipmap-anydpi-v26/full_steam_launcher_icon_svg.xml" value="0.311" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.281" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.331" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/drawable/main_icon.xml" value="0.3355" />

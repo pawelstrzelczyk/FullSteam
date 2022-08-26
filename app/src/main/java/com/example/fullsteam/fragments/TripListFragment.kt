@@ -1,5 +1,7 @@
 package com.example.fullsteam.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fullsteam.FirebaseHandler
+import com.example.fullsteam.firebase.FirebaseHandler
 import com.example.fullsteam.R
 import com.example.fullsteam.models.Trip
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -30,12 +32,17 @@ class TripListFragment : Fragment() {
     private lateinit var trips: ArrayList<Trip>
     private lateinit var tripAdapter: TripListRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var uId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         firebaseHandler = FirebaseHandler()
         trips = arrayListOf()
-        super.onCreate(savedInstanceState)
 
+        sharedPref = requireActivity().getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        )
 
     }
 
@@ -43,10 +50,13 @@ class TripListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        uId = sharedPref.getString(
+            getString(R.string.firebase_user_uid),
+            "uid could not be retrieved"
+        ).toString()
         val view = inflater.inflate(R.layout.fragment_trip_list, container, false)
         val query: Query = FirebaseFirestore.getInstance()
-            .collection("trips").orderBy("dateTime")
-
+            .collection("users").document(uId).collection("trips").orderBy("dateTime")
         val options: FirestoreRecyclerOptions<Trip> = FirestoreRecyclerOptions.Builder<Trip>()
             .setQuery(query, Trip::class.java)
             .build()
@@ -67,7 +77,7 @@ class TripListFragment : Fragment() {
             override fun onItemClick(documentSnapshot: DocumentSnapshot, position: Int) {
                 val id: String = documentSnapshot.id
                 Toast.makeText(requireContext(), "$id document clicked", Toast.LENGTH_LONG).show()
-                val bundle: Bundle = Bundle()
+                val bundle = Bundle()
                 bundle.putString("documentId", documentSnapshot.id)
                 view.findNavController()
                     .navigate(R.id.action_tripListFragment_to_tripDetailsFragment, bundle)

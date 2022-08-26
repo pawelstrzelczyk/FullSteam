@@ -25,4 +25,9 @@
     <string name="add_trip">add trip</string>
     <string name="trip_list">trip list</string>
     <string name="comment">comment</string>
+    <string name="take_photo">Take photo</string>
+    <string name="preference_file_key">com.example.fullsteam.TOKEN</string>
+    <string name="firebase_user_uid">uid</string>
+    <string name="firebase_user_photo_uri">uri</string>
+    <string name="firebase_user_display_name">display_name</string>
 </resources>

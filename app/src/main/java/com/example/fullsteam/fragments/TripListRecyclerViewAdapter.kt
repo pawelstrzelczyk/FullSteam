@@ -86,9 +86,6 @@ class TripListRecyclerViewAdapter(
                 }
             }
 
-
-
-
             trainNameTextView = itemView.findViewById(R.id.trip_list_train_name)
             trainNumberTextView = itemView.findViewById(R.id.trip_list_train_number)
             trainCarrierTextView = itemView.findViewById(R.id.trip_list_train_carrier)

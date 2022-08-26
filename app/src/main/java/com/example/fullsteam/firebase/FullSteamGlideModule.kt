@@ -1,4 +1,4 @@
-package com.example.fullsteam
+package com.example.fullsteam.firebase
 
 import android.content.Context
 import com.bumptech.glide.Glide

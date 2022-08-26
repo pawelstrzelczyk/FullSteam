@@ -1,19 +1,19 @@
-package com.example.fullsteam
+package com.example.fullsteam.firebase
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import com.example.fullsteam.models.Trip
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
 class FirebaseHandler {
     private val database = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
-    private val trips: ArrayList<Trip> = arrayListOf()
     fun addTrip(
+        uId: String,
+        documentId: String,
         context: Context,
         dateTime: String,
         trainBrand: String,
@@ -58,8 +58,8 @@ class FirebaseHandler {
         )
 
 
-        database.collection("trips")
-            .add(trip.tripToJson())
+        database.collection("users").document(uId).collection("trips")
+            .document(documentId).set(trip.tripToJson())
             .addOnSuccessListener { documentReference ->
                 Toast.makeText(
                     context,
@@ -67,7 +67,7 @@ class FirebaseHandler {
                     Toast.LENGTH_LONG
                 ).show()
                 Log.d(
-                    TAG, "DocumentSnapshot added with ID: " + documentReference.id
+                    TAG, "DocumentSnapshot added with ID: $documentReference"
                 )
                 Log.d(
                     TAG, "Train added: " + trip.dateTime + trip.trainBrand + trip.trainName
