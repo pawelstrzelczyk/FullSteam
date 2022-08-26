@@ -18,11 +18,11 @@ import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
 import com.example.fullsteam.AddPhotoActivity
-import com.example.fullsteam.firebase.FirebaseHandler
 import com.example.fullsteam.R
 import com.example.fullsteam.components.BrandSpinnerAdapter
 import com.example.fullsteam.components.CurrencySpinnerAdapter
 import com.example.fullsteam.components.StationAutoCompleteAdapter
+import com.example.fullsteam.firebase.FirebaseHandler
 import com.example.fullsteam.koleo.KoleoClient
 import com.example.fullsteam.koleo.brands.Brand
 import com.example.fullsteam.koleo.carriers.Carrier
@@ -31,6 +31,7 @@ import com.example.fullsteam.portalpasazera.Station
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -65,10 +66,16 @@ class AddTripFormFragment : Fragment() {
     private lateinit var tripAvgSpeedText: TextInputEditText
     private lateinit var tripPricePerKm: TextInputEditText
     private lateinit var tripDelayText: TextInputEditText
+    private lateinit var tripDepartureDelayText: TextInputEditText
+    private lateinit var checkboxesLayout: LinearLayout
     private lateinit var pkmCheckbox: CheckBox
     private lateinit var bikeCheckBox: CheckBox
+    private lateinit var bikePriceLayout: TextInputLayout
+    private lateinit var bikePriceEditText: TextInputEditText
     private lateinit var changeCheckBox: CheckBox
     private lateinit var sleepingCarCheckBox: CheckBox
+    private lateinit var couchettePriceEditText: TextInputEditText
+    private lateinit var couchettePriceLayout: TextInputLayout
     private lateinit var commentEditText: TextInputEditText
     private lateinit var tripAddFab: ExtendedFloatingActionButton
     private lateinit var photoAddFab: FloatingActionButton
@@ -118,10 +125,12 @@ class AddTripFormFragment : Fragment() {
             "uid could not be retrieved"
         ).toString()
         val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
-        val toSaveDocumentId = database.collection("users").document(uId).collection("trips").document().id
+        val toSaveDocumentId =
+            database.collection("users").document(uId).collection("trips").document().id
         var selectedStartStation: Station?
         var selectedEndStation: Station?
         var tripDurationSeconds: Long = Long.MAX_VALUE
+        checkboxesLayout = fragmentView.findViewById(R.id.checkboxes_layout)
         tripDateEditText = fragmentView.findViewById(R.id.trip_date_edit_text)
         tripEndTimeText = fragmentView.findViewById(R.id.trip_end_time_text)
         tripStartTimeText = fragmentView.findViewById(R.id.trip_start_time_text)
@@ -141,15 +150,20 @@ class AddTripFormFragment : Fragment() {
         tripAvgSpeedText = fragmentView.findViewById(R.id.trip_avg_speed_text)
         tripPricePerKm = fragmentView.findViewById(R.id.trip_price_per_km_text)
         tripDelayText = fragmentView.findViewById(R.id.trip_delay_text)
+        tripDepartureDelayText = fragmentView.findViewById(R.id.trip_end_delay_text)
         tripAddFab = fragmentView.findViewById(R.id.trip_add_fab)
         pkmCheckbox = fragmentView.findViewById(R.id.pkm_checkbox)
         bikeCheckBox = fragmentView.findViewById(R.id.bike_checkbox)
+        bikePriceEditText = fragmentView.findViewById(R.id.bike_price_text)
+        bikePriceLayout = fragmentView.findViewById(R.id.bike_price_text_layout)
         changeCheckBox = fragmentView.findViewById(R.id.change_checkbox)
         sleepingCarCheckBox = fragmentView.findViewById(R.id.sleeping_car_checkbox)
+        couchettePriceEditText = fragmentView.findViewById(R.id.couchette_price_text)
+        couchettePriceLayout = fragmentView.findViewById(R.id.couchette_price_text_layout)
         photoAddFab = fragmentView.findViewById(R.id.add_image_fab)
         commentEditText = fragmentView.findViewById(R.id.trip_comment_text)
         tripDelayText.setText("0", TextView.BufferType.EDITABLE)
-
+        tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
 
 
         var brandAdapter = BrandSpinnerAdapter(
@@ -349,11 +363,9 @@ class AddTripFormFragment : Fragment() {
             if (hasFocus) {
                 getTrainData()
             }
-
             if (!hasFocus) {
                 if (tripDelayText.text.toString().isNotEmpty()) {
                     tripDurationSeconds = tripDelayText.text.toString().toLong() * 60
-                    Log.d("tripDurationSeconds", tripDurationSeconds.toString())
                     try {
                         tripEndTimeText.setText(
                             LocalTime.parse(tripEndTimeText.text.toString())
@@ -378,6 +390,7 @@ class AddTripFormFragment : Fragment() {
                             "Cannot change arrival time when it's empty!",
                             Toast.LENGTH_LONG
                         ).show()
+                        tripDelayText.setText(0.toString(), TextView.BufferType.EDITABLE)
                     }
 
                     if (tripDistanceText.text?.isNotEmpty() == true && tripDurationText.text?.isNotEmpty() == true) {
@@ -404,9 +417,99 @@ class AddTripFormFragment : Fragment() {
                     tripDelayText.setSelection(tripDelayText.length())
                 }
 
-
             }
         }
+
+
+        tripDepartureDelayText.onFocusChangeListener =
+            View.OnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    getTrainData()
+                }
+                if (!hasFocus) {
+                    if (tripDepartureDelayText.text.toString().isNotEmpty()) {
+                        tripDurationSeconds = tripDepartureDelayText.text.toString().toLong() * 60
+                        Log.d("tripDurationSeconds", tripDurationSeconds.toString())
+                        try {
+                            tripStartTimeText.setText(
+                                LocalTime.parse(tripStartTimeText.text.toString())
+                                    .plus(Duration.ofSeconds(tripDurationSeconds))
+                                    .toString(),
+                                TextView.BufferType.EDITABLE
+                            )
+                            tripDurationText.setText(
+                                LocalTime.MIN.plus(
+                                    Duration.ofMinutes(
+                                        LocalTime.parse(tripStartTimeText.text.toString()).until(
+                                            LocalTime.parse(tripEndTimeText.text.toString()),
+                                            ChronoUnit.MINUTES
+                                        )
+                                    )
+                                ).toString(),
+                                TextView.BufferType.EDITABLE
+                            )
+                        } catch (e: DateTimeParseException) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Cannot change arrival time when it's empty!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            tripDepartureDelayText.setText(
+                                0.toString(),
+                                TextView.BufferType.EDITABLE
+                            )
+                        }
+
+                        if (tripDistanceText.text?.isNotEmpty() == true && tripDurationText.text?.isNotEmpty() == true) {
+                            tripAvgSpeedText.setText(
+                                String.format(
+                                    Locale.US,
+                                    "%.2f", (tripDistanceText.text.toString().toDouble() * 1000 /
+                                            Duration.ofSeconds(
+                                                LocalTime.MIN.until(
+                                                    LocalTime.parse(
+                                                        tripDurationText.text.toString()
+                                                    ), ChronoUnit.SECONDS
+                                                )
+                                            ).seconds * 3.6)
+                                ),
+                                TextView.BufferType.EDITABLE
+                            )
+                        }
+                    } else {
+                        tripDepartureDelayText.setText(
+                            "0",
+                            TextView.BufferType.EDITABLE
+                        )
+                        tripDepartureDelayText.setSelection(tripDepartureDelayText.length())
+                    }
+
+                }
+            }
+
+        bikeCheckBox.setOnCheckedChangeListener { _, b ->
+            if (b) {
+                bikePriceEditText.visibility = View.VISIBLE
+                bikePriceLayout.visibility = View.VISIBLE
+            } else {
+                bikePriceEditText.visibility = View.GONE
+                bikePriceLayout.visibility = View.GONE
+            }
+            checkboxesLayout.invalidate()
+        }
+
+        sleepingCarCheckBox.setOnCheckedChangeListener { _, b ->
+            if (b) {
+                couchettePriceEditText.visibility = View.VISIBLE
+                couchettePriceLayout.visibility = View.VISIBLE
+            } else {
+                couchettePriceEditText.visibility = View.GONE
+                couchettePriceLayout.visibility = View.GONE
+            }
+            checkboxesLayout.invalidate()
+        }
+
+
 
         tripAddFab.setOnClickListener {
             runBlocking {

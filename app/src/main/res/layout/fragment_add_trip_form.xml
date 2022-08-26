@@ -247,6 +247,70 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/trip_duration_text_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/duration"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    app:startIconDrawable="@drawable/ic_baseline_hourglass_top_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/trip_duration_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="time"
+                        android:tooltipText="@string/duration" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/trip_end_delay_text_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/dep_delay"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    app:startIconDrawable="@drawable/ic_baseline_hourglass_disabled_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/trip_end_delay_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:tooltipText="@string/delay" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/trip_delay_text_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/arr_delay"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    app:startIconDrawable="@drawable/ic_baseline_hourglass_disabled_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/trip_delay_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:tooltipText="@string/delay" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/trip_distance_text_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -306,49 +370,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/trip_duration_text_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="@string/duration"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    app:startIconDrawable="@drawable/ic_baseline_hourglass_top_24">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/trip_duration_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="time"
-                        android:tooltipText="@string/duration" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/trip_delay_text_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="@string/delay"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    app:startIconDrawable="@drawable/ic_baseline_hourglass_disabled_24">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/trip_delay_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="number"
-                        android:tooltipText="@string/delay" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -406,6 +427,7 @@
                 android:paddingBottom="64dp">
 
                 <LinearLayout
+                    android:id="@+id/checkboxes_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
@@ -426,6 +448,22 @@
                         android:checked="false"
                         android:text="@string/bike" />
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/bike_price_text_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/bike_price"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/bike_price_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="number"
+                            android:tooltipText="bike price" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <CheckBox
                         android:id="@+id/change_checkbox"
                         android:layout_width="match_parent"
@@ -439,6 +477,24 @@
                         android:layout_height="match_parent"
                         android:checked="false"
                         android:text="@string/sleeping_car" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/couchette_price_text_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/bike_price"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/couchette_price_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="number"
+                            android:tooltipText="bike price"
+                            android:visibility="invisible" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                 </LinearLayout>
@@ -465,15 +521,16 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_image_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start|bottom"
-        android:contentDescription="@string/add_image_button"
-        android:layout_marginBottom="12dp"
         android:layout_marginStart="12dp"
-        android:id="@+id/add_image_fab"
-        android:src="@drawable/ic_baseline_photo_camera_24"/>
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@string/add_image_button"
+        android:src="@drawable/ic_baseline_photo_camera_24" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/trip_add_fab"

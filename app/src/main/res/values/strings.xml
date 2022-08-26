@@ -44,4 +44,7 @@
     <string name="firebase_user_uid">uid</string>
     <string name="firebase_user_photo_uri">uri</string>
     <string name="firebase_user_display_name">display_name</string>
+    <string name="bike_price">price</string>
+    <string name="dep_delay">dep.</string>
+    <string name="arr_delay">arr</string>
 </resources>
