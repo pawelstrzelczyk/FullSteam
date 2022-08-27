@@ -18,6 +18,8 @@ import com.example.fullsteam.models.Trip
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.time.Duration
+import java.time.LocalTime
 
 
 class TripDetailsFragment : Fragment() {
@@ -37,7 +39,9 @@ class TripDetailsFragment : Fragment() {
     private lateinit var endStation: TextView
     private lateinit var tripDate: TextView
     private lateinit var departureTime: TextView
+    private lateinit var departureTimeDelayed: TextView
     private lateinit var arrivalTime: TextView
+    private lateinit var arrivalTimeDelayed: TextView
     private lateinit var isBike: TextView
     private lateinit var isPKM: TextView
     private lateinit var isCouchette: TextView
@@ -70,6 +74,7 @@ class TripDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val detailsView = inflater.inflate(R.layout.fragment_trip_details, container, false)
+        val imageView = requireActivity().findViewById<ImageView>(R.id.main_options_icon)
         //trainNumber = detailsView.findViewById(R.id.details_train_number)
         trainName = detailsView.findViewById(R.id.details_train_full_name)
         //trainBrand = detailsView.findViewById(R.id.details_train_brand)
@@ -88,7 +93,11 @@ class TripDetailsFragment : Fragment() {
         bikePrice = detailsView.findViewById(R.id.details_summary_bike_price)
         couchettePrice = detailsView.findViewById(R.id.details_summary_couchette_price)
         totalPrice = detailsView.findViewById(R.id.details_summary_whole_price)
-        val imageView = requireActivity().findViewById<ImageView>(R.id.main_options_icon)
+        pricePerKm = detailsView.findViewById(R.id.details_price_per_km)
+        avgSpeed = detailsView.findViewById(R.id.details_avg_speed)
+        departureTimeDelayed = detailsView.findViewById(R.id.details_departure_time_delayed)
+        arrivalTimeDelayed = detailsView.findViewById(R.id.details_arrival_time_delayed)
+
         uId = sharedPref.getString(
             getString(R.string.firebase_user_uid),
             "uid could not be retrieved"
@@ -123,25 +132,40 @@ class TripDetailsFragment : Fragment() {
                         isChange.text = "Change"
                         isCouchette.text = "Couchette"
                         isPKM.text = "PKM"
-                        distance.text = trip.kmDistance.toString()
-                        duration.text = trip.tripTimeInMinutes.toString()
+                        distance.text = buildString {
+                            append(trip.kmDistance)
+                            append(" km")
+                        }
+                        duration.text =
+                            LocalTime.MIN.plus(Duration.ofMinutes(trip.tripTimeInMinutes.toLong()))
+                                .toString() + "h (${trip.tripTimeInMinutes} min)"
                         price.text = trip.price.toString()
                         bikePrice.text = trip.bikePrice.toString()
                         couchettePrice.text = trip.couchettePrice.toString()
+                        pricePerKm.text = trip.pricePerKm.toString() + " ${trip.currency}/km"
+                        avgSpeed.text = trip.avgSpeed.toString() + " km/h"
                         totalPrice.text = "TOTAL "
-                            (trip.price + trip.bikePrice + trip.couchettePrice).toString()
+                        (trip.price + trip.bikePrice + trip.couchettePrice).toString()
 
 
                         if (trip.departureDelay > 0) {
                             departureTime.paintFlags =
                                 departureTime.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                             departureTime.setTextColor(Color.RED)
+
+                            departureTimeDelayed.text =
+                                LocalTime.parse(departureTime.text.toString())
+                                    .plus(Duration.ofMinutes(trip.departureDelay.toLong()))
+                                    .toString()
                         }
 
                         if (trip.delay > 0) {
                             arrivalTime.paintFlags =
                                 arrivalTime.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                             arrivalTime.setTextColor(Color.RED)
+
+                            arrivalTimeDelayed.text = LocalTime.parse(arrivalTime.text.toString())
+                                .plus(Duration.ofMinutes(trip.delay.toLong())).toString()
                         }
                         if (trip.hasBike) {
                             isBike.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -150,7 +174,8 @@ class TripDetailsFragment : Fragment() {
                                 0,
                                 R.drawable.ic_baseline_check_24
                             )
-                            isBike.compoundDrawableTintList = ColorStateList.valueOf(Color.GREEN)
+                            isBike.compoundDrawableTintList =
+                                ColorStateList.valueOf(Color.parseColor("#198000"))
                         }
                         if (trip.isPKM) {
                             isPKM.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -159,7 +184,8 @@ class TripDetailsFragment : Fragment() {
                                 0,
                                 R.drawable.ic_baseline_check_24
                             )
-                            isPKM.compoundDrawableTintList = ColorStateList.valueOf(Color.GREEN)
+                            isPKM.compoundDrawableTintList =
+                                ColorStateList.valueOf(Color.parseColor("#198000"))
                         }
                         if (trip.isSleepingCar) {
                             isCouchette.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -169,7 +195,7 @@ class TripDetailsFragment : Fragment() {
                                 R.drawable.ic_baseline_check_24
                             )
                             isCouchette.compoundDrawableTintList =
-                                ColorStateList.valueOf(Color.GREEN)
+                                ColorStateList.valueOf(Color.parseColor("#198000"))
                         }
                         if (trip.hasChange) {
                             isChange.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -178,7 +204,8 @@ class TripDetailsFragment : Fragment() {
                                 0,
                                 R.drawable.ic_baseline_check_24
                             )
-                            isChange.compoundDrawableTintList = ColorStateList.valueOf(Color.GREEN)
+                            isChange.compoundDrawableTintList =
+                                ColorStateList.valueOf(Color.parseColor("#198000"))
                         }
 
 
