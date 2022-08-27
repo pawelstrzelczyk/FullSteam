@@ -544,7 +544,9 @@ class AddTripFormFragment : Fragment() {
                         trainNameEditText.text.toString(),
                         trainCarrierEditText.text.toString(),
                         startAutoCompleteTextView.text.toString(),
+                        tripStartTimeText.text.toString(),
                         endAutoCompleteTextView.text.toString(),
+                        tripEndTimeText.text.toString(),
                         tripDistanceText.text.toString().toInt(),
                         LocalTime.MIN.until(
                             LocalTime.parse(tripDurationText.text.toString()),

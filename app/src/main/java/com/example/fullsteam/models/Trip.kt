@@ -22,9 +22,15 @@ data class Trip(
     @get: PropertyName("startStation")
     @set: PropertyName("startStation")
     var startStation: String = "",
+    @get: PropertyName("startTime")
+    @set: PropertyName("startTime")
+    var startTime: String = "",
     @get: PropertyName("endStation")
     @set: PropertyName("endStation")
     var endStation: String = "",
+    @get: PropertyName("endTime")
+    @set: PropertyName("endTime")
+    var endTime: String = "",
     @get: PropertyName("kmDistance")
     @set: PropertyName("kmDistance")
     var kmDistance: Int = 0,
@@ -86,7 +92,9 @@ data class Trip(
         json["trainName"] = trainName
         json["carrier"] = carrier
         json["startStation"] = startStation
+        json["startTime"] = startTime
         json["endStation"] = endStation
+        json["endTime"] = endTime
         json["kmDistance"] = kmDistance
         json["tripTimeInMinutes"] = tripTimeInMinutes
         json["price"] = price
