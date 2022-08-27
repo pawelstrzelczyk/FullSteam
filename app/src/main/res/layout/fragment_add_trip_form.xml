@@ -156,7 +156,7 @@
                         app:startIconDrawable="@drawable/ic_baseline_trip_origin_24">
 
 
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        <AutoCompleteTextView
                             android:id="@+id/trip_start_station_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -206,7 +206,7 @@
                         android:paddingEnd="8dp"
                         app:startIconDrawable="@drawable/ic_baseline_flag_24">
 
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        <AutoCompleteTextView
                             android:id="@+id/trip_end_station_text"
                             style="@style/ThemeOverlay.Material3.TextInputEditText"
                             android:layout_width="match_parent"
@@ -460,7 +460,7 @@
                             android:id="@+id/bike_price_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:tooltipText="bike price" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -491,7 +491,7 @@
                             android:id="@+id/couchette_price_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:tooltipText="bike price"
                             android:visibility="invisible" />
                     </com.google.android.material.textfield.TextInputLayout>

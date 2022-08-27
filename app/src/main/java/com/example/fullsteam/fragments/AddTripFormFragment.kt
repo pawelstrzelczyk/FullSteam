@@ -166,6 +166,8 @@ class AddTripFormFragment : Fragment() {
         commentEditText = fragmentView.findViewById(R.id.trip_comment_text)
         tripDelayText.setText("0", TextView.BufferType.EDITABLE)
         tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
+        bikePriceEditText.setText("0", TextView.BufferType.EDITABLE)
+        couchettePriceEditText.setText("0", TextView.BufferType.EDITABLE)
 
 
         var brandAdapter = BrandSpinnerAdapter(
@@ -173,6 +175,8 @@ class AddTripFormFragment : Fragment() {
             brandsList.sortedBy { it.name })
         val currencyAdapter: ArrayAdapter<String> =
             CurrencySpinnerAdapter(requireContext(), currencyList)
+
+
         koleoClient.getCarriers().observeForever {
             for (carrier in it[0].carriers) {
                 carriersList.add(carrier)
@@ -357,7 +361,13 @@ class AddTripFormFragment : Fragment() {
                 getTrainData()
             }
         }
-        startAutoCompleteTextView.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+        startAutoCompleteTextView.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    getTrainData()
+                }
+            }
+        endAutoCompleteTextView.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 getTrainData()
             }
@@ -529,9 +539,22 @@ class AddTripFormFragment : Fragment() {
             checkboxesLayout.invalidate()
         }
 
-
+        photoAddFab.setOnClickListener {
+            val intent = Intent(requireContext(), AddPhotoActivity::class.java)
+            intent.putExtra("documentId", toSaveDocumentId)
+            startActivity(intent)
+        }
 
         tripAddFab.setOnClickListener {
+            if (trainNumberEditText.text.isNullOrBlank()){
+                trainNumberEditText.error = "Please enter train number"
+                return@setOnClickListener
+            }
+            if (tripPriceText.text.isNullOrBlank()){
+                tripPriceText.error = "Please enter price"
+                return@setOnClickListener
+            }
+
             runBlocking {
                 withContext(Dispatchers.Default) {
                     firebaseHandler.addTrip(
@@ -568,15 +591,33 @@ class AddTripFormFragment : Fragment() {
                     )
                 }
             }
+            tripStartTimeText.text?.clear()
+            tripEndTimeText.text?.clear()
+            trainNumberEditText.text.clear()
+            tripDateEditText.text.clear()
+            trainNameEditText.text?.clear()
+            startAutoCompleteTextView.text.clear()
+            endAutoCompleteTextView.text.clear()
+            tripDurationText.text?.clear()
+            tripDelayText.setText("0", TextView.BufferType.EDITABLE)
+            tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
+            bikePriceEditText.setText("0", TextView.BufferType.EDITABLE)
+            couchettePriceEditText.setText("0", TextView.BufferType.EDITABLE)
+            tripPriceText.text!!.clear()
+            tripPricePerKm.text?.clear()
+            tripAvgSpeedText.text?.clear()
+            bikeCheckBox.isChecked = false
+            sleepingCarCheckBox.isChecked = false
+            changeCheckBox.isChecked = false
+            pkmCheckbox.isChecked = false
+            commentEditText.text?.clear()
+            tripDistanceText.text?.clear()
+
 
         }
 
 
-        photoAddFab.setOnClickListener {
-            val intent = Intent(requireContext(), AddPhotoActivity::class.java)
-            intent.putExtra("documentId", toSaveDocumentId)
-            startActivity(intent)
-        }
+
         return fragmentView
 
     }
