@@ -6,61 +6,70 @@ import com.google.firebase.firestore.PropertyName
 data class Trip(
     @get: PropertyName("dateTime")
     @set: PropertyName("dateTime")
-    var dateTime: String="",
+    var dateTime: String = "",
     @get: PropertyName("trainBrand")
     @set: PropertyName("trainBrand")//DateTime,
-    var trainBrand: String="",
+    var trainBrand: String = "",
     @get: PropertyName("trainNumber")
     @set: PropertyName("trainNumber")//TrainBrand,
-    var trainNumber: Int=0,
+    var trainNumber: Int = 0,
     @get: PropertyName("trainName")
     @set: PropertyName("trainName")
-    var trainName: String="",
+    var trainName: String = "",
     @get: PropertyName("carrier")
     @set: PropertyName("carrier")
-    var carrier: String="",//Carrier,
+    var carrier: String = "",//Carrier,
     @get: PropertyName("startStation")
     @set: PropertyName("startStation")
-    var startStation: String="",
+    var startStation: String = "",
     @get: PropertyName("endStation")
     @set: PropertyName("endStation")
-    var endStation: String="",
+    var endStation: String = "",
     @get: PropertyName("kmDistance")
     @set: PropertyName("kmDistance")
-    var kmDistance: Int=0,
+    var kmDistance: Int = 0,
     @get: PropertyName("tripTimeInMinutes")
     @set: PropertyName("tripTimeInMinutes")
-    var tripTimeInMinutes: Int=0,
+    var tripTimeInMinutes: Int = 0,
     @get: PropertyName("price")
     @set: PropertyName("price")
-    var price: Double=0.0,
+    var price: Double = 0.0,
     @get: PropertyName("currency")
     @set: PropertyName("currency")
-    var currency: String="",
+    var currency: String = "",
     @get: PropertyName("pricePerKm")
     @set: PropertyName("pricePerKm")
-    var pricePerKm: Double=0.0,
+    var pricePerKm: Double = 0.0,
     @get: PropertyName("avgSpeed")
     @set: PropertyName("avgSpeed")
-    var avgSpeed: Double=0.0,
+    var avgSpeed: Double = 0.0,
     @get: PropertyName("hasChange")
     @set: PropertyName("hasChange")
-    var hasChange: Boolean=false,
+    var hasChange: Boolean = false,
     @get: PropertyName("hasBike")
     @set: PropertyName("hasBike")
-    var hasBike: Boolean=false,
+    var hasBike: Boolean = false,
+    @get: PropertyName("bikePrice")
+    @set: PropertyName("bikePrice")
+    var bikePrice: Double = 0.0,
     @get: PropertyName("isPKM")
     @set: PropertyName("isPKM")
-    var isPKM: Boolean=false,
+    var isPKM: Boolean = false,
     @get: PropertyName("isSleepingCar")
     @set: PropertyName("isSleepingCar")
-    var isSleepingCar: Boolean=false,
+    var isSleepingCar: Boolean = false,
+    @get: PropertyName("couchettePrice")
+    @set: PropertyName("couchettePrice")
+    var couchettePrice: Double = 0.0,
     @get: PropertyName("delay")
     @set: PropertyName("delay")
-    var delay: Int=0,
+    var delay: Int = 0,
+    @get: PropertyName("departureDelay")
+    @set: PropertyName("departureDelay")
+    var departureDelay: Int = 0,
     @get: PropertyName("comment")
     @set: PropertyName("comment")
-    var comment: String=""
+    var comment: String = ""
 
 ) {
 //    constructor() : this(
@@ -85,9 +94,12 @@ data class Trip(
         json["avgSpeed"] = avgSpeed
         json["hasChange"] = hasChange
         json["hasBike"] = hasBike
+        json["bikePrice"] = bikePrice
         json["isPKM"] = isPKM
         json["isSleepingCar"] = isSleepingCar
+        json["couchettePrice"] = couchettePrice
         json["delay"] = delay
+        json["departureDelay"] = departureDelay
         json["comment"] = comment
         json["currency"] = currency
         return json

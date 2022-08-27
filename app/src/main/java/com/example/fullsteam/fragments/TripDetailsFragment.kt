@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
-private const val DOCUMENT_ID = "documentId"
+
 
 class TripDetailsFragment : Fragment() {
     private var documentId: String? = null
@@ -25,7 +25,7 @@ class TripDetailsFragment : Fragment() {
     private val database = FirebaseFirestore.getInstance()
     private lateinit var sharedPref: SharedPreferences
     private lateinit var uId: String
-
+    private val DOCUMENT_ID = "documentId"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

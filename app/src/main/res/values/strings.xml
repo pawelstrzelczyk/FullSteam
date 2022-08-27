@@ -31,10 +31,10 @@
     <string name="take_photo">Take photo</string>
     <string name="add_image_button">add image button</string>
     <string name="take_picture_button">take picture button</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Full Steam</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in with Google</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -47,4 +47,9 @@
     <string name="bike_price">price</string>
     <string name="dep_delay">dep.</string>
     <string name="arr_delay">arr</string>
+    <string name="login_background_image">login background image</string>
+    <string name="welcome_to_full_steam">Welcome to Full Steam!</string>
+    <string name="micha_strzelczyk">Michał Strzelczyk</string>
+    <string name="logout">logout</string>
+    <string name="settings">settings</string>
 </resources>

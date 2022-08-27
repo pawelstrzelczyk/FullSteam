@@ -90,6 +90,7 @@ class AddTripFormFragment : Fragment() {
     private var database = FirebaseFirestore.getInstance()
     private lateinit var sharedPref: SharedPreferences
     private lateinit var uId: String
+    private lateinit var tripDateIfPast: LocalDate
     private val brandsToPromote: List<String> = listOf(
         "KW",
         "IC",
@@ -130,6 +131,7 @@ class AddTripFormFragment : Fragment() {
         var selectedStartStation: Station?
         var selectedEndStation: Station?
         var tripDurationSeconds: Long = Long.MAX_VALUE
+
         checkboxesLayout = fragmentView.findViewById(R.id.checkboxes_layout)
         tripDateEditText = fragmentView.findViewById(R.id.trip_date_edit_text)
         tripEndTimeText = fragmentView.findViewById(R.id.trip_end_time_text)
@@ -260,12 +262,25 @@ class AddTripFormFragment : Fragment() {
             datePickerDialog = DatePickerDialog(
                 fragmentView.context,
                 { _, yearPicked, monthPicked, dayPicked ->
+
+
+                    val date = LocalDate.parse(
+                        LocalDate.of(yearPicked, monthPicked + 1, dayPicked).toString(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                    )
+
+                    tripDateIfPast = if (LocalDate.now() > date) {
+                        LocalDate.parse(
+                            LocalDate.now().toString(),
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        )
+                    } else {
+                        date
+                    }
+
                     tripDateEditText.setText(
                         //"$dayPicked/$monthPicked/$yearPicked"
-                        LocalDate.parse(
-                            LocalDate.of(yearPicked, monthPicked + 1, dayPicked).toString(),
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        ).toString()
+                        date.toString()
                     )
 
                 },
@@ -337,7 +352,12 @@ class AddTripFormFragment : Fragment() {
         })
 
 
-        trainNameEditText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+        trainNameEditText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                getTrainData()
+            }
+        }
+        startAutoCompleteTextView.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 getTrainData()
             }
@@ -536,12 +556,13 @@ class AddTripFormFragment : Fragment() {
                         tripAvgSpeedText.text.toString().toDouble(),
                         changeCheckBox.isChecked,
                         bikeCheckBox.isChecked,
+                        bikePriceEditText.text.toString().toDouble(),
                         pkmCheckbox.isChecked,
                         sleepingCarCheckBox.isChecked,
+                        couchettePriceEditText.text.toString().toDouble(),
                         tripDelayText.text.toString().toInt(),
+                        tripDepartureDelayText.text.toString().toInt(),
                         commentEditText.text.toString()
-
-
                     )
                 }
             }
@@ -576,7 +597,7 @@ class AddTripFormFragment : Fragment() {
 
                     if (calendarResponse.isNotEmpty()) {
                         koleoTrainNumber =
-                            calendarResponse[0].train_calendars[0].date_train_map[tripDateEditText.text.toString()]!!
+                            calendarResponse[0].train_calendars[0].date_train_map[tripDateIfPast.toString()]!!
 
                         koleoClient.getTrain(requireContext(), koleoTrainNumber).observeForever {
                             if (startAutoCompleteTextView.text.isNotEmpty()) {

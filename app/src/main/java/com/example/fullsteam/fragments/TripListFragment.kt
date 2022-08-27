@@ -56,7 +56,7 @@ class TripListFragment : Fragment() {
         ).toString()
         val view = inflater.inflate(R.layout.fragment_trip_list, container, false)
         val query: Query = FirebaseFirestore.getInstance()
-            .collection("users").document(uId).collection("trips").orderBy("dateTime")
+            .collection("users").document(uId).collection("trips").orderBy("dateTime", Query.Direction.DESCENDING)
         val options: FirestoreRecyclerOptions<Trip> = FirestoreRecyclerOptions.Builder<Trip>()
             .setQuery(query, Trip::class.java)
             .build()

@@ -30,9 +30,12 @@ class FirebaseHandler {
         avgSpeed: Double,
         hasChange: Boolean,
         hasBike: Boolean,
+        bikePrice: Double,
         isPKM: Boolean,
         isSleepingCar: Boolean,
+        sleepingCarPrice: Double,
         delay: Int,
+        departureDelay: Int,
         comment: String
     ) {
         val trip = Trip(
@@ -51,9 +54,12 @@ class FirebaseHandler {
             avgSpeed,
             hasChange,
             hasBike,
+            bikePrice,
             isPKM,
             isSleepingCar,
+            sleepingCarPrice,
             delay,
+            departureDelay,
             comment
         )
 

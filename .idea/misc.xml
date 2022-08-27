@@ -4,7 +4,30 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.311" />
-        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/activity_login.xml" value="0.4257246376811594" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/full_steam_svg_foreground.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_123_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_apartment_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_arrow_right_alt_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_attach_money_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_copyright_16.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_copyright_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_flag_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_hourglass_disabled_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_hourglass_top_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_list_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.282" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_timeline_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_train_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_baseline_trip_origin_24.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/ic_launcher_background.xml" value="0.324" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/drawable/logout_24.xml" value="0.282" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/activity_main.xml" value="0.27445652173913043" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_add_photo.xml" value="0.2994791666666667" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_add_trip_form.xml" value="0.2630208333333333" />
@@ -12,6 +35,7 @@
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_trip_details.xml" value="0.3109375" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_trip_element.xml" value="0.2390625" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/layout/fragment_trip_list.xml" value="0.2390625" />
+        <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/menu/app_bar_menu.xml" value="0.2765625" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/mipmap-anydpi-v26/full_steam_launcher_icon.xml" value="0.311" />
         <entry key="..\:/Users/pawel/Documents/studia/6sem/AM/FullSteam/app/src/main/res/mipmap-anydpi-v26/full_steam_launcher_icon_svg.xml" value="0.311" />
         <entry key="..\:/Users/strze/AndroidStudioProjects/FullSteam/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.281" />

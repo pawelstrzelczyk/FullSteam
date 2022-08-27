@@ -32,4 +32,8 @@
     <string name="firebase_user_display_name">display_name</string>
     <string name="bike_price">price</string>
     <string name="arr_delay">arr</string>
+    <string name="welcome_to_full_steam">Welcome to Full Steam!</string>
+    <string name="micha_strzelczyk">Michał Strzelczyk</string>
+    <string name="logout">logout</string>
+    <string name="settings">settings</string>
 </resources>
