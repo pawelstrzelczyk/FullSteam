@@ -26,7 +26,7 @@
     <string name="add_fab">add</string>
     <string name="arrow">arrow</string>
     <string name="add_trip">add trip</string>
-    <string name="trip_list">trip list</string>
+    <string name="trip_list">trips</string>
     <string name="comment">comment</string>
     <string name="take_photo">Take photo</string>
     <string name="add_image_button">add image button</string>
@@ -53,4 +53,5 @@
     <string name="logout">logout</string>
     <string name="settings">settings</string>
     <string name="edit_trip_fab">edit trip fab</string>
+    <string name="stats">stats</string>
 </resources>

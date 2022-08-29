@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.fullsteam.R
@@ -56,6 +57,8 @@ class TripDetailsFragment : Fragment() {
     private lateinit var pricePerKm: TextView
     private lateinit var avgSpeed: TextView
     private lateinit var comment: TextView
+    private lateinit var couchettePriceLayout: LinearLayout
+    private lateinit var bikePriceLayout: LinearLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,6 +100,8 @@ class TripDetailsFragment : Fragment() {
         avgSpeed = detailsView.findViewById(R.id.details_avg_speed)
         departureTimeDelayed = detailsView.findViewById(R.id.details_departure_time_delayed)
         arrivalTimeDelayed = detailsView.findViewById(R.id.details_arrival_time_delayed)
+        couchettePriceLayout = detailsView.findViewById(R.id.couchette_price_layout)
+        bikePriceLayout = detailsView.findViewById(R.id.bike_price_layout)
 
         uId = sharedPref.getString(
             getString(R.string.firebase_user_uid),
@@ -140,12 +145,21 @@ class TripDetailsFragment : Fragment() {
                             LocalTime.MIN.plus(Duration.ofMinutes(trip.tripTimeInMinutes.toLong()))
                                 .toString() + "h (${trip.tripTimeInMinutes} min)"
                         price.text = trip.price.toString()
-                        bikePrice.text = trip.bikePrice.toString()
-                        couchettePrice.text = trip.couchettePrice.toString()
+                        val bikePriceValue = trip.bikePrice
+                        if (bikePriceValue > 0) {
+                            bikePrice.text = bikePriceValue.toString()
+                            bikePriceLayout.visibility = View.VISIBLE
+                        }
+                        val couchettePriceValue = trip.couchettePrice
+                        if (couchettePriceValue > 0) {
+                            couchettePrice.text = couchettePriceValue.toString()
+                            couchettePriceLayout.visibility = View.VISIBLE
+                        }
+
                         pricePerKm.text = trip.pricePerKm.toString() + " ${trip.currency}/km"
                         avgSpeed.text = trip.avgSpeed.toString() + " km/h"
-                        totalPrice.text = "TOTAL "
-                        (trip.price + trip.bikePrice + trip.couchettePrice).toString()
+                        totalPrice.text =
+                            (trip.price + trip.bikePrice + trip.couchettePrice).toString()
 
 
                         if (trip.departureDelay > 0) {

@@ -36,4 +36,5 @@
     <string name="micha_strzelczyk">Michał Strzelczyk</string>
     <string name="logout">logout</string>
     <string name="settings">settings</string>
+    <string name="stats">stats</string>
 </resources>

@@ -85,8 +85,11 @@
         android:id="@+id/bottom_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:itemRippleColor="@color/ppMain"
+        app:labelVisibilityMode="selected"
         app:layout_anchor="@+id/nestedScrollView"
         app:layout_anchorGravity="bottom|center"
         app:menu="@menu/bottom_navigation_menu" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
