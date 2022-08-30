@@ -37,4 +37,5 @@
     <string name="logout">logout</string>
     <string name="settings">settings</string>
     <string name="stats">stats</string>
+    <string name="save">save</string>
 </resources>

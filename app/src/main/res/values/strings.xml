@@ -54,4 +54,5 @@
     <string name="settings">settings</string>
     <string name="edit_trip_fab">edit trip fab</string>
     <string name="stats">stats</string>
+    <string name="save">save</string>
 </resources>

@@ -27,6 +27,10 @@ class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) 
         return p0.toLong()
     }
 
+    fun getPositionByString(item: String): Int {
+        return brandList.indexOf(brandList.find { it.display_name == item })
+    }
+
 
     @SuppressLint("Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

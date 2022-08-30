@@ -31,6 +31,7 @@ class TripListRecyclerViewAdapter(
         holder.tripStartStation.text = model.startStation
         holder.tripEndStation.text = model.endStation
         holder.tripDate.text = model.dateTime
+
         if (model.isPKM) {
             backgroundColor = Color(142, 169, 219, 255).hashCode()
         } else if (model.isSleepingCar) {
@@ -100,7 +101,7 @@ class TripListRecyclerViewAdapter(
 
     }
 
-    fun deleteTrip(position: Int){
+    fun deleteTrip(position: Int) {
         snapshots.getSnapshot(position).reference.delete()
     }
 

@@ -38,5 +38,14 @@
         android:id="@+id/tripDetailsFragment"
         android:name="com.example.fullsteam.fragments.TripDetailsFragment"
         android:label="fragment_trip_details"
-        tools:layout="@layout/fragment_trip_details" />
+        tools:layout="@layout/fragment_trip_details" >
+        <action
+            android:id="@+id/action_tripDetailsFragment_to_editTripFragment"
+            app:destination="@id/editTripFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTripFragment"
+        android:name="com.example.fullsteam.fragments.EditTripFragment"
+        android:label="EditTripFragment" >
+    </fragment>
 </navigation>

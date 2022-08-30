@@ -9,13 +9,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.AnimationUtils
+import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
+import androidx.navigation.findNavController
 import com.example.fullsteam.R
+import com.example.fullsteam.animation.startAnimation
 import com.example.fullsteam.firebase.GlideApp
 import com.example.fullsteam.models.Trip
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -59,6 +67,8 @@ class TripDetailsFragment : Fragment() {
     private lateinit var comment: TextView
     private lateinit var couchettePriceLayout: LinearLayout
     private lateinit var bikePriceLayout: LinearLayout
+    private lateinit var fabOvalView: View
+    private lateinit var fabEdit: FloatingActionButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +80,7 @@ class TripDetailsFragment : Fragment() {
             getString(R.string.preference_file_key), Context.MODE_PRIVATE
         )
 
+
     }
 
     override fun onCreateView(
@@ -78,6 +89,12 @@ class TripDetailsFragment : Fragment() {
     ): View? {
         val detailsView = inflater.inflate(R.layout.fragment_trip_details, container, false)
         val imageView = requireActivity().findViewById<ImageView>(R.id.main_options_icon)
+        val animation =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fab_transition).apply {
+                duration = 600
+                interpolator = AccelerateInterpolator()
+
+            }
         //trainNumber = detailsView.findViewById(R.id.details_train_number)
         trainName = detailsView.findViewById(R.id.details_train_full_name)
         //trainBrand = detailsView.findViewById(R.id.details_train_brand)
@@ -102,6 +119,21 @@ class TripDetailsFragment : Fragment() {
         arrivalTimeDelayed = detailsView.findViewById(R.id.details_arrival_time_delayed)
         couchettePriceLayout = detailsView.findViewById(R.id.couchette_price_layout)
         bikePriceLayout = detailsView.findViewById(R.id.bike_price_layout)
+        fabEdit = detailsView.findViewById(R.id.edit_trip_fab)
+        fabOvalView = detailsView.findViewById(R.id.fab_oval_view)
+
+        val action = R.id.action_tripDetailsFragment_to_editTripFragment
+        val bundle = Bundle()
+        bundle.putString("documentId", documentId)
+        fabEdit.setOnClickListener {
+            fabEdit.visibility = View.INVISIBLE
+            fabOvalView.visibility = View.VISIBLE
+            fabOvalView.startAnimation(animation) {
+                requireView().findNavController().navigate(action, bundle)
+            }
+        }
+
+
 
         uId = sharedPref.getString(
             getString(R.string.firebase_user_uid),
@@ -240,3 +272,5 @@ class TripDetailsFragment : Fragment() {
     }
 
 }
+
+
