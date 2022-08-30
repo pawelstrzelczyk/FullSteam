@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.example.fullsteam.R
 import com.example.fullsteam.components.BrandSpinnerAdapter
@@ -30,6 +31,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -502,9 +504,7 @@ class EditTripFragment : Fragment() {
 
 
 
-        tripEditFab.setOnClickListener {
-            requireView().findNavController().popBackStack()
-        }
+
 
         documentId?.let {
             database.collection("users").document(uId).collection("trips")
@@ -607,6 +607,45 @@ class EditTripFragment : Fragment() {
 
                     }
                 }
+        }
+
+        tripEditFab.setOnClickListener {
+
+            if (documentId != null) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    firebaseHandler.editTrip(
+                        uId,
+                        documentId!!,
+                        requireContext(),
+                        tripDateEditText.text.toString(),
+                        selectedBrand?.name.toString(),
+                        trainNumberEditText.text.toString().toInt(),
+                        trainNameEditText.text.toString(),
+                        trainCarrierEditText.text.toString(),
+                        startAutoCompleteTextView.text.toString(),
+                        tripStartTimeText.text.toString(),
+                        endAutoCompleteTextView.text.toString(),
+                        tripEndTimeText.text.toString(),
+                        tripDistanceText.text.toString().toInt(),
+                        tripDurationText.text.toString().toInt(),
+                        tripPriceText.text.toString().toDouble(),
+                        currencySpinner.selectedItem.toString(),
+                        tripPricePerKm.text.toString().toDouble(),
+                        tripAvgSpeedText.text.toString().toDouble(),
+                        changeCheckBox.isChecked,
+                        bikeCheckBox.isChecked,
+                        bikePriceEditText.text.toString().toDouble(),
+                        pkmCheckbox.isChecked,
+                        sleepingCarCheckBox.isChecked,
+                        couchettePriceEditText.text.toString().toDouble(),
+                        tripDelayText.text.toString().toInt(),
+                        tripDepartureDelayText.text.toString().toInt(),
+                        commentEditText.text.toString()
+                    )
+                }
+            }
+
+            requireView().findNavController().popBackStack()
         }
 
         return fragmentView

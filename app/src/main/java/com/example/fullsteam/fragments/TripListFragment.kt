@@ -2,6 +2,7 @@ package com.example.fullsteam.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +13,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagingConfig
+import androidx.recyclerview.widget.*
 import com.example.fullsteam.R
 import com.example.fullsteam.firebase.FirebaseHandler
 import com.example.fullsteam.models.Trip
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,13 +57,20 @@ class TripListFragment : Fragment() {
         val query: Query = FirebaseFirestore.getInstance()
             .collection("users").document(uId).collection("trips")
             .orderBy("dateTime", Query.Direction.DESCENDING)
-        val options: FirestoreRecyclerOptions<Trip> = FirestoreRecyclerOptions.Builder<Trip>()
-            .setQuery(query, Trip::class.java)
+        val config = PagingConfig(20, 10, false)
+
+        val options: FirestorePagingOptions<Trip> = FirestorePagingOptions.Builder<Trip>()
+            .setLifecycleOwner(this)
+            .setQuery(query, config, Trip::class.java)
             .build()
         recyclerView = view.findViewById(R.id.trip_list_recycler_view)
 
         tripAdapter = TripListRecyclerViewAdapter(options)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        } else {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }
         recyclerView.adapter = tripAdapter
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -141,22 +147,25 @@ class TripListFragment : Fragment() {
 
         }).attachToRecyclerView(recyclerView)
 
+
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        recyclerView.recycledViewPool.clear()
-        tripAdapter.notifyDataSetChanged()
-        tripAdapter.startListening()
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        recyclerView.recycledViewPool.clear()
-        tripAdapter.stopListening()
-    }
+//
+//    override fun onStart() {
+//        super.onStart()
+//        recyclerView.recycledViewPool.clear()
+////        tripAdapter.notifyDataSetChanged()
+//        tripAdapter.startListening()
+//
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        recyclerView.recycledViewPool.clear()
+//        tripAdapter.stopListening()
+//    }
 
 
 }
