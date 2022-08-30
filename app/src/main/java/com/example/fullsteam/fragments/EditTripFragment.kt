@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -103,6 +104,8 @@ class EditTripFragment : Fragment() {
     private lateinit var couchettePriceEditText: TextInputEditText
     private lateinit var couchettePriceLayout: TextInputLayout
     private lateinit var commentEditText: TextInputEditText
+    private lateinit var originalStartTime: String
+    private lateinit var originalEndTime: String
 
     private var database = FirebaseFirestore.getInstance()
     private lateinit var uId: String
@@ -131,6 +134,7 @@ class EditTripFragment : Fragment() {
         var tripDurationSeconds: Long
         val fragmentView = inflater.inflate(R.layout.fragment_edit_trip, container, false)
         var tripToEdit: Trip
+
         trainNumberEditText = fragmentView.findViewById(R.id.edit_train_number_edit_text)
         trainNameEditText = fragmentView.findViewById(R.id.train_name_edit_text)
         tripEditFab = fragmentView.findViewById(R.id.trip_edit_fab)
@@ -412,6 +416,12 @@ class EditTripFragment : Fragment() {
                     )
                     tripDelayText.setSelection(tripDelayText.length())
                 }
+            } else {
+                tripEndTimeText.setText(
+                    originalEndTime,
+                    TextView.BufferType.EDITABLE
+                )
+                tripDelayText.setText("0", TextView.BufferType.EDITABLE)
             }
         }
         tripDepartureDelayText.onFocusChangeListener =
@@ -477,6 +487,12 @@ class EditTripFragment : Fragment() {
                         tripDepartureDelayText.setSelection(tripDepartureDelayText.length())
                     }
 
+                } else {
+                    tripStartTimeText.setText(
+                        originalStartTime,
+                        TextView.BufferType.EDITABLE
+                    )
+                    tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
                 }
             }
 
@@ -537,10 +553,12 @@ class EditTripFragment : Fragment() {
                             tripToEdit.startTime,
                             TextView.BufferType.EDITABLE
                         )
+                        originalStartTime = tripToEdit.startTime
                         tripEndTimeText.setText(
                             tripToEdit.endTime,
                             TextView.BufferType.EDITABLE
                         )
+                        originalEndTime = tripToEdit.endTime
                         tripDurationText.setText(
                             tripToEdit.tripTimeInMinutes.toString(),
                             TextView.BufferType.EDITABLE
@@ -627,7 +645,14 @@ class EditTripFragment : Fragment() {
                         endAutoCompleteTextView.text.toString(),
                         tripEndTimeText.text.toString(),
                         tripDistanceText.text.toString().toInt(),
-                        tripDurationText.text.toString().toInt(),
+                        if (tripDurationText.text.toString().isDigitsOnly()) {
+                            tripDurationText.text.toString().toInt()
+                        } else {
+                            LocalTime.MIN.until(
+                                LocalTime.parse(tripDurationText.text.toString()),
+                                ChronoUnit.MINUTES
+                            ).toInt()
+                        },
                         tripPriceText.text.toString().toDouble(),
                         currencySpinner.selectedItem.toString(),
                         tripPricePerKm.text.toString().toDouble(),

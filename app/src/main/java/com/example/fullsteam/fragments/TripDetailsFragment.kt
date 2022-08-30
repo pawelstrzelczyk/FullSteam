@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.time.Duration
 import java.time.LocalTime
+import androidx.compose.ui.graphics.Color as GraphicsColor
 
 
 class TripDetailsFragment : Fragment() {
@@ -197,21 +198,47 @@ class TripDetailsFragment : Fragment() {
                         if (trip.departureDelay > 0) {
                             departureTime.paintFlags =
                                 departureTime.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                            departureTime.setTextColor(Color.RED)
 
                             departureTimeDelayed.text =
                                 LocalTime.parse(departureTime.text.toString())
                                     .plus(Duration.ofMinutes(trip.departureDelay.toLong()))
                                     .toString()
                         }
-
                         if (trip.delay > 0) {
                             arrivalTime.paintFlags =
                                 arrivalTime.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                            arrivalTime.setTextColor(Color.RED)
-
                             arrivalTimeDelayed.text = LocalTime.parse(arrivalTime.text.toString())
                                 .plus(Duration.ofMinutes(trip.delay.toLong())).toString()
+                        }
+                        when (trip.delay) {
+                            in 1..30 -> {
+                                arrivalTime.setTextColor(GraphicsColor(105, 194, 125, 255).hashCode())
+                            }
+                            in 31..60 -> {
+                                arrivalTime.setTextColor(GraphicsColor(245, 170, 78, 255).hashCode())
+                            }
+                            in 61..120 -> {
+                                arrivalTime.setTextColor(GraphicsColor(252, 66, 66, 255).hashCode())
+                            }
+                            in 121..Int.MAX_VALUE -> {
+                                arrivalTime.setTextColor(GraphicsColor(0, 0, 0, 255).hashCode())
+
+                            }
+                        }
+                        when (trip.departureDelay) {
+                            in 1..30 -> {
+                                departureTime.setTextColor(GraphicsColor(105, 194, 125, 255).hashCode())
+                            }
+                            in 31..60 -> {
+                                departureTime.setTextColor(GraphicsColor(245, 170, 78, 255).hashCode())
+                            }
+                            in 61..120 -> {
+                                departureTime.setTextColor(GraphicsColor(252, 66, 66, 255).hashCode())
+                            }
+                            in 121..Int.MAX_VALUE -> {
+                                departureTime.setTextColor(GraphicsColor(0, 0, 0, 255).hashCode())
+
+                            }
                         }
                         if (trip.hasBike) {
                             isBike.setCompoundDrawablesRelativeWithIntrinsicBounds(
