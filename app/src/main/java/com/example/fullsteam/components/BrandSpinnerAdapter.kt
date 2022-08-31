@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.fullsteam.R
@@ -26,11 +25,6 @@ class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) 
     override fun getItemId(p0: Int): Long {
         return p0.toLong()
     }
-
-    fun getPositionByString(item: String): Int {
-        return brandList.indexOf(brandList.find { it.display_name == item })
-    }
-
 
     @SuppressLint("Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

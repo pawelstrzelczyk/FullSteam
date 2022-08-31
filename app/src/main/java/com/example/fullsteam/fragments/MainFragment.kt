@@ -3,7 +3,6 @@ package com.example.fullsteam.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.example.fullsteam.R
 import com.example.fullsteam.components.CarrierStatsRecyclerAdapter
 import com.example.fullsteam.components.LongHaulStatsRecyclerAdapter
 import com.example.fullsteam.firebase.GlideApp
-import com.example.fullsteam.models.Carrier
 import com.example.fullsteam.models.LongHaulStats
 import com.example.fullsteam.models.StatsCarrier
 import com.example.fullsteam.models.Trip
@@ -72,10 +70,10 @@ class MainFragment : Fragment() {
         avgOperatingSpeedProgressBar = view.findViewById(R.id.avg_operating_speed_progress_bar)
         carriersProgressBar = view.findViewById(R.id.carriers_progress_bar)
         longHaulProgressBar = view.findViewById(R.id.long_haul_progress_bar)
-        usernameText.text = "Hi, " + sharedPref.getString(
+        ("Hi, " + sharedPref.getString(
             getString(R.string.firebase_user_display_name),
             "username could not be retrieved"
-        )
+        )).also { usernameText.text = it }
 
         userProfilePictureUri = sharedPref.getString(
             getString(R.string.firebase_user_photo_uri),
@@ -128,10 +126,10 @@ class MainFragment : Fragment() {
 
                 avgOperatingSpeedProgressBar.visibility = View.GONE
                 averageOperatingSpeedText.visibility = View.VISIBLE
-                averageOperatingSpeedText.text = String.format("%.2f", speedSum) + String.format(
+                (String.format("%.2f", speedSum) + String.format(
                     " (%.2f)",
                     speedSumWithDelays
-                )
+                )).also { averageOperatingSpeedText.text = it }
                 groupedCarriers.forEach {
                     carrierListWithCount.add(StatsCarrier(it.key, it.value))
                 }

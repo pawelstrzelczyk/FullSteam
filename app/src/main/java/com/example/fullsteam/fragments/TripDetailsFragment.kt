@@ -9,15 +9,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
-import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.navigation.findNavController
 import com.example.fullsteam.R
 import com.example.fullsteam.animation.startAnimation
@@ -39,12 +36,9 @@ class TripDetailsFragment : Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var uId: String
     private val DOCUMENT_ID = "documentId"
-
-
     //fields
-    private lateinit var trainNumber: TextView
+
     private lateinit var trainName: TextView
-    private lateinit var trainBrand: TextView
     private lateinit var startStation: TextView
     private lateinit var endStation: TextView
     private lateinit var tripDate: TextView
@@ -189,10 +183,18 @@ class TripDetailsFragment : Fragment() {
                             couchettePriceLayout.visibility = View.VISIBLE
                         }
 
-                        pricePerKm.text = trip.pricePerKm.toString() + " ${trip.currency}/km"
-                        avgSpeed.text = trip.avgSpeed.toString() + " km/h"
-                        totalPrice.text =
-                            (trip.price + trip.bikePrice + trip.couchettePrice).toString()
+                        pricePerKm.text = buildString {
+                            append(trip.pricePerKm)
+                            append(" ")
+                            append(trip.currency)
+                            append("/km")
+                        }
+                        avgSpeed.text = buildString {
+                            append(trip.avgSpeed)
+                            append(" km/h")
+                        }
+                        (trip.price + trip.bikePrice + trip.couchettePrice).toString()
+                            .also { totalPrice.text = it }
 
 
                         if (trip.departureDelay > 0) {
@@ -212,10 +214,24 @@ class TripDetailsFragment : Fragment() {
                         }
                         when (trip.delay) {
                             in 1..30 -> {
-                                arrivalTime.setTextColor(GraphicsColor(105, 194, 125, 255).hashCode())
+                                arrivalTime.setTextColor(
+                                    GraphicsColor(
+                                        105,
+                                        194,
+                                        125,
+                                        255
+                                    ).hashCode()
+                                )
                             }
                             in 31..60 -> {
-                                arrivalTime.setTextColor(GraphicsColor(245, 170, 78, 255).hashCode())
+                                arrivalTime.setTextColor(
+                                    GraphicsColor(
+                                        245,
+                                        170,
+                                        78,
+                                        255
+                                    ).hashCode()
+                                )
                             }
                             in 61..120 -> {
                                 arrivalTime.setTextColor(GraphicsColor(252, 66, 66, 255).hashCode())
@@ -227,13 +243,34 @@ class TripDetailsFragment : Fragment() {
                         }
                         when (trip.departureDelay) {
                             in 1..30 -> {
-                                departureTime.setTextColor(GraphicsColor(105, 194, 125, 255).hashCode())
+                                departureTime.setTextColor(
+                                    GraphicsColor(
+                                        105,
+                                        194,
+                                        125,
+                                        255
+                                    ).hashCode()
+                                )
                             }
                             in 31..60 -> {
-                                departureTime.setTextColor(GraphicsColor(245, 170, 78, 255).hashCode())
+                                departureTime.setTextColor(
+                                    GraphicsColor(
+                                        245,
+                                        170,
+                                        78,
+                                        255
+                                    ).hashCode()
+                                )
                             }
                             in 61..120 -> {
-                                departureTime.setTextColor(GraphicsColor(252, 66, 66, 255).hashCode())
+                                departureTime.setTextColor(
+                                    GraphicsColor(
+                                        252,
+                                        66,
+                                        66,
+                                        255
+                                    ).hashCode()
+                                )
                             }
                             in 121..Int.MAX_VALUE -> {
                                 departureTime.setTextColor(GraphicsColor(0, 0, 0, 255).hashCode())

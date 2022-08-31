@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -128,9 +127,7 @@ class AddTripFormFragment : Fragment() {
         val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
         val toSaveDocumentId =
             database.collection("users").document(uId).collection("trips").document().id
-        var selectedStartStation: Station?
-        var selectedEndStation: Station?
-        var tripDurationSeconds: Long = Long.MAX_VALUE
+        var tripDurationSeconds: Long
 
         checkboxesLayout = fragmentView.findViewById(R.id.checkboxes_layout)
         tripDateEditText = fragmentView.findViewById(R.id.trip_date_edit_text)
@@ -372,7 +369,9 @@ class AddTripFormFragment : Fragment() {
                 getTrainData()
             }
         }
-        tripPriceText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+
+        tripPriceText.setText("0", TextView.BufferType.EDITABLE)
+        tripPriceText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 if (tripDistanceText.text?.isNotEmpty() == true && tripPriceText.text?.isNotEmpty() == true) {
                     tripPricePerKm.setText(
@@ -389,7 +388,7 @@ class AddTripFormFragment : Fragment() {
             }
 
         }
-        tripDelayText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+        tripDelayText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 getTrainData()
             }
@@ -452,7 +451,7 @@ class AddTripFormFragment : Fragment() {
 
 
         tripDepartureDelayText.onFocusChangeListener =
-            View.OnFocusChangeListener { view, hasFocus ->
+            View.OnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     getTrainData()
                 }
@@ -546,11 +545,11 @@ class AddTripFormFragment : Fragment() {
         }
 
         tripAddFab.setOnClickListener {
-            if (trainNumberEditText.text.isNullOrBlank()){
+            if (trainNumberEditText.text.isNullOrBlank()) {
                 trainNumberEditText.error = "Please enter train number"
                 return@setOnClickListener
             }
-            if (tripPriceText.text.isNullOrBlank()){
+            if (tripPriceText.text.isNullOrBlank()) {
                 tripPriceText.error = "Please enter price"
                 return@setOnClickListener
             }
@@ -603,7 +602,7 @@ class AddTripFormFragment : Fragment() {
             tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
             bikePriceEditText.setText("0", TextView.BufferType.EDITABLE)
             couchettePriceEditText.setText("0", TextView.BufferType.EDITABLE)
-            tripPriceText.text!!.clear()
+            tripPriceText.text?.clear()
             tripPricePerKm.text?.clear()
             tripAvgSpeedText.text?.clear()
             bikeCheckBox.isChecked = false
@@ -668,12 +667,16 @@ class AddTripFormFragment : Fragment() {
                                 val minute =
                                     it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.minute
                                 tripEndTimeText.setText(
-                                    "${String.format("%02d", hour)}:${
-                                        String.format(
-                                            "%02d",
-                                            minute
+                                    buildString {
+                                        append(String.format("%02d", hour))
+                                        append(":")
+                                        append(
+                                            String.format(
+                                                "%02d",
+                                                minute
+                                            )
                                         )
-                                    }",
+                                    },
                                     TextView.BufferType.EDITABLE
                                 )
                             }
@@ -698,7 +701,6 @@ class AddTripFormFragment : Fragment() {
                                     ).show()
                                 }
                                 try {
-
                                     endDistance =
                                         it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.distance!!
                                 } catch (

@@ -55,5 +55,10 @@
     <string name="edit_trip_fab">edit trip fab</string>
     <string name="stats">stats</string>
     <string name="save">save</string>
-    <string name="time_spent_in_train">Time spent in train</string>
+    <string name="time_spent_in_train">Time spent in train (min)</string>
+    <string name="average_operating_speed_w_delays">Average operating speed (w/ delays)</string>
+    <string name="number_of_travels_by_carrier">number of travels by carrier</string>
+    <string name="most_popular_long_haul_trains">most popular long haul trains</string>
+    <string name="distance_travelled_km">Distance travelled (km)</string>
+    <string name="stats_icon_menu">stats icon menu</string>
 </resources>

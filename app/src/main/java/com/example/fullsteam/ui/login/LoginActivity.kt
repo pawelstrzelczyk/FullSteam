@@ -3,14 +3,12 @@ package com.example.fullsteam.ui.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fullsteam.MainActivity
 import com.example.fullsteam.R
-import com.example.fullsteam.databinding.ActivityLoginBinding
 import com.example.fullsteam.firebase.GlideApp
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -52,8 +50,12 @@ class LoginActivity : AppCompatActivity() {
             createSignIn()
         }
 
-        if (FirebaseAuth.getInstance().currentUser != null){
-            Toast.makeText(this, "${FirebaseAuth.getInstance().currentUser?.displayName} logged in!", Toast.LENGTH_LONG)
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            Toast.makeText(
+                this,
+                "${FirebaseAuth.getInstance().currentUser?.displayName} logged in!",
+                Toast.LENGTH_LONG
+            )
                 .show()
 
 
@@ -112,12 +114,5 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
-
-    private fun signOut() {
-        AuthUI.getInstance().signOut(this).addOnSuccessListener {
-            Toast.makeText(this, "Logged out!", Toast.LENGTH_LONG).show()
-        }
-    }
-
 
 }

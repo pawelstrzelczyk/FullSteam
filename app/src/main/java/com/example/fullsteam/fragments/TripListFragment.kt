@@ -5,11 +5,9 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -85,7 +83,7 @@ class TripListFragment : Fragment() {
             override fun onItemClick(documentSnapshot: DocumentSnapshot, position: Int) {
                 val id: String = documentSnapshot.id
                 val bundle = Bundle()
-                bundle.putString("documentId", documentSnapshot.id)
+                bundle.putString("documentId", id)
                 view.findNavController()
                     .navigate(R.id.action_tripListFragment_to_tripDetailsFragment, bundle)
             }
@@ -131,7 +129,7 @@ class TripListFragment : Fragment() {
                     )
                     .addActionIcon(R.drawable.ic_baseline_delete_forever_24)
                     .create()
-                    .decorate();
+                    .decorate()
 
                 super.onChildDraw(
                     c,

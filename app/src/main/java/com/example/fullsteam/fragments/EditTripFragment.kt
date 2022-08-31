@@ -8,7 +8,6 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -343,11 +342,6 @@ class EditTripFragment : Fragment() {
                 }
             }
         })
-        tripDistanceText.onFocusChangeListener = View.OnFocusChangeListener{view, hasFocus ->
-            if (!hasFocus){
-
-            }
-        }
 
         tripPriceText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
@@ -367,7 +361,7 @@ class EditTripFragment : Fragment() {
 
         }
 
-        tripDelayText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+        tripDelayText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 if (tripDelayText.text.toString().isNotEmpty()) {
                     tripDurationSeconds = tripDelayText.text.toString().toLong() * 60

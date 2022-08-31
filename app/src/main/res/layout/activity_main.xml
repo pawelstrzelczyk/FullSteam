@@ -28,6 +28,7 @@
             app:toolbarId="@id/activity_main_toolbar">
 
             <ImageView
+                android:contentDescription="@string/stats_icon_menu"
                 android:id="@+id/main_options_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +19,6 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.fullsteam.databinding.ActivityAddPhotoBinding
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,7 +27,6 @@ import java.util.concurrent.Executors
 
 class AddPhotoActivity : AppCompatActivity() {
     private val storage = FirebaseStorage.getInstance()
-    private val database = FirebaseFirestore.getInstance()
     private lateinit var viewBinding: ActivityAddPhotoBinding
     private var imageCapture: ImageCapture? = null
     private lateinit var imageCaptureButton: ImageButton
