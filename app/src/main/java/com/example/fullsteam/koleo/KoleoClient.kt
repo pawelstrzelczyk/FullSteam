@@ -42,7 +42,7 @@ class KoleoClient {
                 "/brands".httpGet().responseObject<BrandsResponse>(mapper).third
             Log.d("response", response.toString())
             response.onError {
-                Log.e("response failed", ":((((((((((((((((")
+                Log.e("response failed", it.message.toString())
             }
             response.success {
                 ppStationsExecutor.add(it)
@@ -61,7 +61,7 @@ class KoleoClient {
                 "/carriers".httpGet().responseObject<CarriersResponse>(mapper).third
             Log.d("response", response.toString())
             response.onError {
-                Log.e("response failed", ":((((((((((((((((")
+                Log.e("response failed", it.message.toString())
             }
             response.success {
                 ppStationsExecutor.add(it)
@@ -93,7 +93,7 @@ class KoleoClient {
 
             response.onError {
                 try {
-                    Log.e("response failed", ":((((((((((((((((")
+                    Log.e("response failed", it.message.toString())
                 } catch (e: FuelError) {
 
                 }
@@ -119,7 +119,7 @@ class KoleoClient {
             Log.d("response", response.get().train.name)
             response.onError {
                 try {
-                    Log.e("response failed", ":((((((((((((((((")
+                    Log.e("response failed", it.message.toString())
                 } catch (e: FuelError) {
 
                 }

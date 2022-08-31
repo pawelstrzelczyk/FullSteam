@@ -459,7 +459,7 @@ class AddTripFormFragment : Fragment() {
                 if (!hasFocus) {
                     if (tripDepartureDelayText.text.toString().isNotEmpty()) {
                         tripDurationSeconds = tripDepartureDelayText.text.toString().toLong() * 60
-                        Log.d("tripDurationSeconds", tripDurationSeconds.toString())
+
                         try {
                             tripStartTimeText.setText(
                                 LocalTime.parse(tripStartTimeText.text.toString())

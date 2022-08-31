@@ -43,7 +43,6 @@ class LoginActivity : AppCompatActivity() {
 
         imageReference.addOnSuccessListener {
             val randomPicture = Random(LocalTime.now().nano).nextInt(it.items.size)
-            Log.d("random int", randomPicture.toString())
             GlideApp.with(this).load(it.items[randomPicture]).into(backgroundImageView)
         }
 

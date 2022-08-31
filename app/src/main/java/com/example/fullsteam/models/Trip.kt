@@ -78,11 +78,6 @@ data class Trip(
     var comment: String = ""
 
 ) {
-//    constructor() : this(
-//        "", "", 0, "", "", "", "",
-//        0, 0, 0.0, 0.0, 0.0, false,
-//        false, false, false, 0, ""
-//    )
 
     fun tripToJson(): MutableMap<String, Any> {
         val json: MutableMap<String, Any> = HashMap()

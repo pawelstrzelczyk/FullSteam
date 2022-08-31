@@ -79,12 +79,11 @@ class TripListFragment : Fragment() {
             )
         )
 
-        Log.d("trips size", trips.size.toString())
+
         tripAdapter.setOnItemClickListener(object :
             TripListRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(documentSnapshot: DocumentSnapshot, position: Int) {
                 val id: String = documentSnapshot.id
-                Toast.makeText(requireContext(), "$id document clicked", Toast.LENGTH_LONG).show()
                 val bundle = Bundle()
                 bundle.putString("documentId", documentSnapshot.id)
                 view.findNavController()

@@ -343,6 +343,11 @@ class EditTripFragment : Fragment() {
                 }
             }
         })
+        tripDistanceText.onFocusChangeListener = View.OnFocusChangeListener{view, hasFocus ->
+            if (!hasFocus){
+
+            }
+        }
 
         tripPriceText.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
@@ -430,7 +435,6 @@ class EditTripFragment : Fragment() {
                     if (tripDepartureDelayText.text.toString().isNotEmpty()) {
                         tripDurationSeconds =
                             tripDepartureDelayText.text.toString().toLong() * 60
-                        Log.d("tripDurationSeconds", tripDurationSeconds.toString())
                         try {
                             tripStartTimeText.setText(
                                 LocalTime.parse(tripStartTimeText.text.toString())
@@ -607,6 +611,12 @@ class EditTripFragment : Fragment() {
                             }
                             val tempBrands =
                                 brandsList.filter { brand -> brand.name == tripBrand }.toSet()
+                            trainCarrierEditText.setText(
+                                carriersList.find { carrier ->
+                                    carrier.id == (brandsList[0].carrier_id)
+                                }?.name ?: "unknown",
+                                TextView.BufferType.EDITABLE
+                            )
                             brandsList.removeAll(tempBrands)
                             brandsToPromote.reversed().forEach { brandToPromote ->
                                 tempBrands.find { tempBrand -> tempBrand.name == brandToPromote }
@@ -622,6 +632,7 @@ class EditTripFragment : Fragment() {
 
 
                         brandSpinner.adapter = brandAdapter
+
 
                     }
                 }

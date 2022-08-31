@@ -78,7 +78,6 @@ class AddPhotoActivity : AppCompatActivity() {
 
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
-        Log.d(TAG, "dupaaaaaaaaaaaaaaaaaaa")
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat("HH:mm:ss", Locale.UK)
             .format(System.currentTimeMillis())

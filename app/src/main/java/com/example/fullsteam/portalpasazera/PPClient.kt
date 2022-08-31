@@ -32,7 +32,7 @@ class PPClient {
                 ).responseObject<List<Station>>(mapper).third
                 Log.d("response", response.toString())
                 response.onError {
-                    Log.e("response failed", ":((((((((((((((((")
+                    Log.e("response failed", it.message.toString())
                 }
                 response.success {
                     ppStationsExecutor.add(it)

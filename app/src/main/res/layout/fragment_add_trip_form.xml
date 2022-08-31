@@ -128,7 +128,7 @@
                         android:id="@+id/train_carrier_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="text"
+                        android:inputType="textNoSuggestions"
                         android:tooltipText="@string/train_carrier" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

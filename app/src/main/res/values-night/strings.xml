@@ -38,4 +38,5 @@
     <string name="settings">settings</string>
     <string name="stats">stats</string>
     <string name="save">save</string>
+    <string name="time_spent_in_train">Time spent in train</string>
 </resources>
