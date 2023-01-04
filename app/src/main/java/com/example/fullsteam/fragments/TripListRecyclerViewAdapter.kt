@@ -101,8 +101,10 @@ class TripListRecyclerViewAdapter(
 
     }
 
-    fun deleteTrip(position: Int) {
+    fun deleteTrip(position: Int, tripListRecyclerViewAdapter: TripListRecyclerViewAdapter) {
         snapshot()[position]?.reference?.delete()
+        tripListRecyclerViewAdapter.notifyDataSetChanged()
+        tripListRecyclerViewAdapter.refresh()
     }
 
     interface OnItemClickListener {

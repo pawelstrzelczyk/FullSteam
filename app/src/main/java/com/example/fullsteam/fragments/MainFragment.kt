@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fullsteam.R
 import com.example.fullsteam.components.CarrierStatsRecyclerAdapter
 import com.example.fullsteam.components.LongHaulStatsRecyclerAdapter
-import com.example.fullsteam.firebase.GlideApp
 import com.example.fullsteam.models.LongHaulStats
 import com.example.fullsteam.models.StatsCarrier
 import com.example.fullsteam.models.Trip
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -75,16 +75,16 @@ class MainFragment : Fragment() {
             "username could not be retrieved"
         )).also { usernameText.text = it }
 
-        userProfilePictureUri = sharedPref.getString(
-            getString(R.string.firebase_user_photo_uri),
-            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
-        ).toString()
-        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
+//        userProfilePictureUri = sharedPref.getString(
+//            getString(R.string.firebase_user_photo_uri),
+//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
+//        ).toString()
+//        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
+        imageView.setImageResource(R.color.ppMain)
 
 
         database.collection("users").document(uid).collection("trips").get()
             .addOnSuccessListener { querySnapshot ->
-                val trips: ArrayList<Trip> = arrayListOf()
                 var totalDistance = 0
                 var totalTimeSpent = 0
                 var speedSum = 0.0
@@ -93,9 +93,8 @@ class MainFragment : Fragment() {
                 val carrierListWithCount: ArrayList<StatsCarrier> = arrayListOf()
                 val longHaulList: ArrayList<String> = arrayListOf()
                 val longHaulListWithCount: ArrayList<LongHaulStats> = arrayListOf()
-                for (document in querySnapshot.documents) {
-                    document.toObject(Trip::class.java)?.let { trip -> trips.add(trip) }
-                }
+                val trips: List<Trip> =
+                    querySnapshot.documents.map { documentSnapshot -> documentSnapshot.toObject(Trip::class.java)!! }
 
                 trips.forEach {
                     totalDistance += it.kmDistance

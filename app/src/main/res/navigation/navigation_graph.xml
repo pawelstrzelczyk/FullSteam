@@ -13,7 +13,7 @@
         <action
             android:id="@+id/action_addTripFormFragment_to_tripListFragment"
             app:destination="@id/tripListFragment"
-            app:launchSingleTop="false" />
+            app:launchSingleTop="true" />
     </fragment>
     <fragment
         android:id="@+id/tripListFragment"

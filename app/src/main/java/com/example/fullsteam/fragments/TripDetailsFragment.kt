@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
+import com.google.firebase.storage.StorageReference
 import java.time.Duration
 import java.time.LocalTime
 import androidx.compose.ui.graphics.Color as GraphicsColor
@@ -60,6 +63,7 @@ class TripDetailsFragment : Fragment() {
     private lateinit var pricePerKm: TextView
     private lateinit var avgSpeed: TextView
     private lateinit var comment: TextView
+    private lateinit var imageView: ImageView
     private lateinit var couchettePriceLayout: LinearLayout
     private lateinit var bikePriceLayout: LinearLayout
     private lateinit var fabOvalView: View
@@ -83,7 +87,7 @@ class TripDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val detailsView = inflater.inflate(R.layout.fragment_trip_details, container, false)
-        val imageView = requireActivity().findViewById<ImageView>(R.id.main_options_icon)
+        imageView = requireActivity().findViewById<ImageView>(R.id.main_options_icon)
         val animation =
             AnimationUtils.loadAnimation(requireContext(), R.anim.fab_transition).apply {
                 duration = 600
@@ -134,6 +138,12 @@ class TripDetailsFragment : Fragment() {
             getString(R.string.firebase_user_uid),
             "uid could not be retrieved"
         ).toString()
+
+        val userProfilePictureUri = sharedPref.getString(
+            getString(R.string.firebase_user_photo_uri),
+            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
+        ).toString()
+
         documentId?.let {
             database.collection("users").document(uId).collection("trips")
                 .document(documentId.toString())
@@ -142,9 +152,22 @@ class TripDetailsFragment : Fragment() {
                     if (documentSnapshot != null) {
                         val storageReference =
                             FirebaseStorage.getInstance().reference.child("train_pics")
-                        var imageReference = storageReference
-                        documentId?.let { imageReference = storageReference.child(it) }
-                        GlideApp.with(this).load(imageReference).into(imageView)
+                        var imageReference: StorageReference
+                        documentId?.let {
+                            try {
+                                imageReference = storageReference.child(it)
+                                imageReference.downloadUrl.addOnSuccessListener {
+                                    GlideApp.with(this).load(imageReference).into(imageView)
+                                    Log.d("duupa", it.toString())
+                                }
+
+
+                            } catch (e: StorageException) {
+                                GlideApp.with(this).load(userProfilePictureUri).into(imageView)
+                            }
+                        }
+
+
 
                         trip = documentSnapshot.toObject(Trip::class.java)!!
                         //trainNumber.text = trip.trainNumber.toString()
@@ -333,6 +356,11 @@ class TripDetailsFragment : Fragment() {
 
 
         return detailsView
+    }
+
+    override fun onDetach() {
+        imageView.setImageResource(R.color.ppMain)
+        super.onDetach()
     }
 
 }

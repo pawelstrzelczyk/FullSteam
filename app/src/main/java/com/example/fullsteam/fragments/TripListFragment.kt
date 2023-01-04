@@ -5,9 +5,11 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -15,6 +17,7 @@ import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.*
 import com.example.fullsteam.R
 import com.example.fullsteam.firebase.FirebaseHandler
+import com.example.fullsteam.firebase.GlideApp
 import com.example.fullsteam.models.Trip
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.material.snackbar.Snackbar
@@ -30,6 +33,7 @@ class TripListFragment : Fragment() {
     private lateinit var tripAdapter: TripListRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var userProfilePictureUri: String
     private lateinit var uId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +55,7 @@ class TripListFragment : Fragment() {
             getString(R.string.firebase_user_uid),
             "uid could not be retrieved"
         ).toString()
+        val imageView = requireActivity().findViewById<ImageView>(R.id.main_options_icon)
         val view = inflater.inflate(R.layout.fragment_trip_list, container, false)
         val query: Query = FirebaseFirestore.getInstance()
             .collection("users").document(uId).collection("trips")
@@ -76,8 +81,12 @@ class TripListFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
-
-
+//        userProfilePictureUri = sharedPref.getString(
+//            getString(R.string.firebase_user_photo_uri),
+//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
+//        ).toString()
+//        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
+        imageView.setImageResource(R.color.ppMain)
         tripAdapter.setOnItemClickListener(object :
             TripListRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(documentSnapshot: DocumentSnapshot, position: Int) {
@@ -99,7 +108,8 @@ class TripListFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                tripAdapter.deleteTrip(viewHolder.absoluteAdapterPosition)
+                tripAdapter.deleteTrip(viewHolder.absoluteAdapterPosition, tripAdapter)
+
                 Snackbar.make(view, "Trip deleted!", Snackbar.LENGTH_LONG).show()
             }
 
@@ -148,21 +158,19 @@ class TripListFragment : Fragment() {
         return view
     }
 
+    override fun onStart() {
+        super.onStart()
+        recyclerView.recycledViewPool.clear()
+        tripAdapter.startListening()
 
-//
-//    override fun onStart() {
-//        super.onStart()
-//        recyclerView.recycledViewPool.clear()
-////        tripAdapter.notifyDataSetChanged()
-//        tripAdapter.startListening()
-//
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        recyclerView.recycledViewPool.clear()
-//        tripAdapter.stopListening()
-//    }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        recyclerView.recycledViewPool.clear()
+        tripAdapter.stopListening()
+    }
 
 
 }

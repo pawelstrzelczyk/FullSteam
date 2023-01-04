@@ -10,4 +10,5 @@
     <color name="swipeToDelete">#AF0000</color>
     <color name="ppMain">#004d84</color>
     <color name="ppButton">#007bc7</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

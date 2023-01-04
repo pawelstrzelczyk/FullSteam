@@ -6,6 +6,7 @@
     android:name="com.example.fullsteam.fragments.TripListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".fragments.TripListFragment"
     tools:listitem="@layout/fragment_trip_element" />

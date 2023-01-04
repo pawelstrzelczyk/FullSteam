@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="32dp">
 
 
             <LinearLayout
@@ -245,7 +245,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@id/icons_layout"
+                android:layout_marginTop="84dp"
                 android:gravity="bottom"
                 android:orientation="vertical">
 
@@ -403,20 +404,19 @@
             </LinearLayout>
 
 
-
-
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/Widget.App.FloatingActionButton"
         android:id="@+id/edit_trip_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/edit_trip_fab"
         android:src="@drawable/ic_baseline_edit_24" />
 
@@ -429,6 +429,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/edit_trip_fab"
         app:layout_constraintEnd_toEndOf="@+id/edit_trip_fab"
         app:layout_constraintStart_toStartOf="@+id/edit_trip_fab"
-        app:layout_constraintTop_toTopOf="@+id/edit_trip_fab" />
+        app:layout_constraintTop_toTopOf="@+id/edit_trip_fab"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

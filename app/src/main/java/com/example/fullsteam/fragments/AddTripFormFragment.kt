@@ -1,7 +1,5 @@
 package com.example.fullsteam.fragments
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -27,10 +25,14 @@ import com.example.fullsteam.koleo.brands.Brand
 import com.example.fullsteam.koleo.carriers.Carrier
 import com.example.fullsteam.portalpasazera.PPClient
 import com.example.fullsteam.portalpasazera.Station
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -38,14 +40,13 @@ import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
 import java.util.*
 
 class AddTripFormFragment : Fragment() {
-    private lateinit var datePickerDialog: DatePickerDialog
-    private lateinit var timePickerDialog: TimePickerDialog
     private lateinit var tripDateEditText: EditText
     private lateinit var brandSpinner: Spinner
     private lateinit var trainNumberEditText: EditText
@@ -90,6 +91,7 @@ class AddTripFormFragment : Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var uId: String
     private lateinit var tripDateIfPast: LocalDate
+    private lateinit var imageView: ImageView
     private val brandsToPromote: List<String> = listOf(
         "KW",
         "IC",
@@ -124,11 +126,19 @@ class AddTripFormFragment : Fragment() {
             getString(R.string.firebase_user_uid),
             "uid could not be retrieved"
         ).toString()
+//        val userProfilePictureUri = sharedPref.getString(
+//            getString(R.string.firebase_user_photo_uri),
+//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
+//        ).toString()
+
         val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
         val toSaveDocumentId =
             database.collection("users").document(uId).collection("trips").document().id
         var tripDurationSeconds: Long
+        imageView = requireActivity().findViewById(R.id.main_options_icon)
+        imageView.setImageResource(R.color.ppMain)
 
+//        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
         checkboxesLayout = fragmentView.findViewById(R.id.checkboxes_layout)
         tripDateEditText = fragmentView.findViewById(R.id.trip_date_edit_text)
         tripEndTimeText = fragmentView.findViewById(R.id.trip_end_time_text)
@@ -198,7 +208,6 @@ class AddTripFormFragment : Fragment() {
         )
 
 
-
         brandSpinner.adapter = brandAdapter
         brandSpinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
@@ -223,73 +232,56 @@ class AddTripFormFragment : Fragment() {
             val calendar: Calendar = Calendar.getInstance()
             val hour = calendar.get(Calendar.HOUR)
             val minute = calendar.get(Calendar.MINUTE)
-            timePickerDialog = TimePickerDialog(
-                fragmentView.context,
-                { _, i, i2 ->
-                    tripStartTimeText.setText(buildString {
-                        append(i)
-                        append(String.format(":%02d", i2))
-                    })
-                },
-                hour,
-                minute,
-                true
-            )
-            timePickerDialog.show()
+            val timePickerDialog =
+                MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(hour).setMinute(minute).build()
+
+            timePickerDialog.show(parentFragmentManager, "Select start time")
+            timePickerDialog.addOnPositiveButtonClickListener {
+                tripStartTimeText.setText(buildString {
+                    append(timePickerDialog.hour)
+                    append(String.format(":%02d", timePickerDialog.minute))
+                })
+            }
         }
         tripEndTimeText.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
             val hour = calendar.get(Calendar.HOUR)
             val minute = calendar.get(Calendar.MINUTE)
-            timePickerDialog = TimePickerDialog(
-                fragmentView.context,
-                { _, i, i2 ->
-                    tripEndTimeText.setText(buildString {
-                        append(i)
-                        append(String.format(":%02d", i2))
-                    })
-                },
-                hour,
-                minute,
-                true
-            )
-            timePickerDialog.show()
+            val timePickerDialog =
+                MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(hour).setMinute(minute).build()
+
+            timePickerDialog.show(parentFragmentManager, "Select end time")
+            timePickerDialog.addOnPositiveButtonClickListener {
+                tripEndTimeText.setText(buildString {
+                    append(timePickerDialog.hour)
+                    append(String.format(":%02d", timePickerDialog.minute))
+                })
+            }
         }
         tripDateEditText.setOnClickListener {
-            val calendar: Calendar = Calendar.getInstance()
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-            val month = calendar.get(Calendar.MONTH)
-            val year = calendar.get(Calendar.YEAR)
-            datePickerDialog = DatePickerDialog(
-                fragmentView.context,
-                { _, yearPicked, monthPicked, dayPicked ->
-
-
-                    val date = LocalDate.parse(
-                        LocalDate.of(yearPicked, monthPicked + 1, dayPicked).toString(),
+            val datePickerDialog = MaterialDatePicker.Builder.datePicker().setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setOpenAt(MaterialDatePicker.thisMonthInUtcMilliseconds()).build()
+            ).setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+            datePickerDialog.show(parentFragmentManager, "select date")
+            datePickerDialog.addOnPositiveButtonClickListener {
+                val date = Date(it).toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                tripDateIfPast = if (LocalDate.now() > date) {
+                    LocalDate.parse(
+                        LocalDate.now().toString(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd")
                     )
+                } else {
+                    date
+                }
+                tripDateEditText.setText(
+                    date.toString()
+                )
+                tripDateEditText.error = null
+            }
 
-                    tripDateIfPast = if (LocalDate.now() > date) {
-                        LocalDate.parse(
-                            LocalDate.now().toString(),
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        )
-                    } else {
-                        date
-                    }
-
-                    tripDateEditText.setText(
-                        //"$dayPicked/$monthPicked/$yearPicked"
-                        date.toString()
-                    )
-
-                },
-                year,
-                month,
-                day
-            )
-            datePickerDialog.show()
         }
         stations = arrayListOf()
         stationsLabels = arrayListOf()
@@ -371,6 +363,7 @@ class AddTripFormFragment : Fragment() {
         }
 
         tripPriceText.setText("0", TextView.BufferType.EDITABLE)
+        tripPricePerKm.setText("0", TextView.BufferType.EDITABLE)
         tripPriceText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 if (tripDistanceText.text?.isNotEmpty() == true && tripPriceText.text?.isNotEmpty() == true) {
@@ -545,87 +538,96 @@ class AddTripFormFragment : Fragment() {
         }
 
         tripAddFab.setOnClickListener {
+            if (tripDateEditText.text.isNullOrBlank()) {
+                tripDateEditText.error = "Please enter trip date"
+                tripDateEditText.requestFocus()
+
+            }
             if (trainNumberEditText.text.isNullOrBlank()) {
                 trainNumberEditText.error = "Please enter train number"
-                return@setOnClickListener
+                trainNumberEditText.requestFocus()
+
+            }
+            if (trainNameEditText.text.isNullOrBlank()) {
+                trainNameEditText.error = "Please enter train name"
+                trainNameEditText.requestFocus()
+
             }
             if (tripPriceText.text.isNullOrBlank()) {
                 tripPriceText.error = "Please enter price"
-                return@setOnClickListener
-            }
+                tripPriceText.requestFocus()
 
-            runBlocking {
-                withContext(Dispatchers.Default) {
-                    firebaseHandler.addTrip(
-                        uId,
-                        toSaveDocumentId,
-                        requireContext(),
-                        tripDateEditText.text.toString(),
-                        selectedBrand?.name.toString(),
-                        trainNumberEditText.text.toString().toInt(),
-                        trainNameEditText.text.toString(),
-                        trainCarrierEditText.text.toString(),
-                        startAutoCompleteTextView.text.toString(),
-                        tripStartTimeText.text.toString(),
-                        endAutoCompleteTextView.text.toString(),
-                        tripEndTimeText.text.toString(),
-                        tripDistanceText.text.toString().toInt(),
-                        LocalTime.MIN.until(
-                            LocalTime.parse(tripDurationText.text.toString()),
-                            ChronoUnit.MINUTES
-                        ).toInt(),
-                        tripPriceText.text.toString().toDouble(),
-                        currencySpinner.selectedItem.toString(),
-                        tripPricePerKm.text.toString().toDouble(),
-                        tripAvgSpeedText.text.toString().toDouble(),
-                        changeCheckBox.isChecked,
-                        bikeCheckBox.isChecked,
-                        bikePriceEditText.text.toString().toDouble(),
-                        pkmCheckbox.isChecked,
-                        sleepingCarCheckBox.isChecked,
-                        couchettePriceEditText.text.toString().toDouble(),
-                        tripDelayText.text.toString().toInt(),
-                        tripDepartureDelayText.text.toString().toInt(),
-                        commentEditText.text.toString()
-                    )
+            }
+            if (tripPricePerKm.text.isNullOrBlank()) {
+                tripPriceText.error = "Please calculate price"
+                tripPriceText.requestFocus()
+
+            }
+            if (!(tripPriceText.text.isNullOrBlank() || trainNumberEditText.text.isNullOrBlank() || tripDateEditText.text.isNullOrBlank() || trainNameEditText.text.isNullOrBlank())) {
+                runBlocking {
+                    withContext(Dispatchers.Default) {
+                        firebaseHandler.addTrip(
+                            uId,
+                            toSaveDocumentId,
+                            requireContext(),
+                            tripDateEditText.text.toString(),
+                            selectedBrand?.name.toString(),
+                            trainNumberEditText.text.toString().toInt(),
+                            trainNameEditText.text.toString(),
+                            trainCarrierEditText.text.toString(),
+                            startAutoCompleteTextView.text.toString(),
+                            tripStartTimeText.text.toString(),
+                            endAutoCompleteTextView.text.toString(),
+                            tripEndTimeText.text.toString(),
+                            tripDistanceText.text.toString().toInt(),
+                            LocalTime.MIN.until(
+                                LocalTime.parse(tripDurationText.text.toString()),
+                                ChronoUnit.MINUTES
+                            ).toInt(),
+                            tripPriceText.text.toString().toDouble(),
+                            currencySpinner.selectedItem.toString(),
+                            tripPricePerKm.text.toString().toDouble(),
+                            tripAvgSpeedText.text.toString().toDouble(),
+                            changeCheckBox.isChecked,
+                            bikeCheckBox.isChecked,
+                            bikePriceEditText.text.toString().toDouble(),
+                            pkmCheckbox.isChecked,
+                            sleepingCarCheckBox.isChecked,
+                            couchettePriceEditText.text.toString().toDouble(),
+                            tripDelayText.text.toString().toInt(),
+                            tripDepartureDelayText.text.toString().toInt(),
+                            commentEditText.text.toString()
+                        )
+                    }
                 }
+                tripStartTimeText.text?.clear()
+                tripEndTimeText.text?.clear()
+                trainNumberEditText.text.clear()
+                tripDateEditText.text.clear()
+                trainNameEditText.text?.clear()
+                startAutoCompleteTextView.text.clear()
+                endAutoCompleteTextView.text.clear()
+                tripDurationText.text?.clear()
+                tripDelayText.setText("0", TextView.BufferType.EDITABLE)
+                tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
+                bikePriceEditText.setText("0", TextView.BufferType.EDITABLE)
+                couchettePriceEditText.setText("0", TextView.BufferType.EDITABLE)
+                tripPriceText.text?.clear()
+                tripPricePerKm.text?.clear()
+                tripAvgSpeedText.text?.clear()
+                bikeCheckBox.isChecked = false
+                sleepingCarCheckBox.isChecked = false
+                changeCheckBox.isChecked = false
+                pkmCheckbox.isChecked = false
+                commentEditText.text?.clear()
+                tripDistanceText.text?.clear()
+
+
             }
-            tripStartTimeText.text?.clear()
-            tripEndTimeText.text?.clear()
-            trainNumberEditText.text.clear()
-            tripDateEditText.text.clear()
-            trainNameEditText.text?.clear()
-            startAutoCompleteTextView.text.clear()
-            endAutoCompleteTextView.text.clear()
-            tripDurationText.text?.clear()
-            tripDelayText.setText("0", TextView.BufferType.EDITABLE)
-            tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
-            bikePriceEditText.setText("0", TextView.BufferType.EDITABLE)
-            couchettePriceEditText.setText("0", TextView.BufferType.EDITABLE)
-            tripPriceText.text?.clear()
-            tripPricePerKm.text?.clear()
-            tripAvgSpeedText.text?.clear()
-            bikeCheckBox.isChecked = false
-            sleepingCarCheckBox.isChecked = false
-            changeCheckBox.isChecked = false
-            pkmCheckbox.isChecked = false
-            commentEditText.text?.clear()
-            tripDistanceText.text?.clear()
-
-
         }
-
-
-
         return fragmentView
 
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
-    }
-
 
     private fun getTrainData() {
         if (tripDateEditText.text.isNotEmpty() && trainNumberEditText.text.isNotEmpty() && trainNameEditText.text?.isNotEmpty() == true && brandSpinner.selectedItem != null) {

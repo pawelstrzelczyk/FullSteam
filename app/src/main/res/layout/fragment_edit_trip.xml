@@ -9,15 +9,13 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingVertical="16dp">
+            android:paddingVertical="32dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -430,7 +428,7 @@
                     android:id="@+id/checkboxes_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="2"
                     android:orientation="vertical"
                     android:paddingEnd="8dp">
 
@@ -524,12 +522,13 @@
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        style="@style/Widget.App.FloatingActionButton"
         android:id="@+id/trip_edit_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:drawableEnd="@drawable/ic_baseline_save_24"
         android:text="@string/save"
         android:textAlignment="textEnd" />

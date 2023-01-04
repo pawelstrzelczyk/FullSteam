@@ -31,6 +31,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -604,7 +605,7 @@ class EditTripFragment : Fragment() {
                                 brandsList.add(brand)
                             }
                             val tempBrands =
-                                brandsList.filter { brand -> brand.name == tripBrand }.toSet()
+                                brandsList.filter { brand -> brand.name == tripToEdit.trainBrand }.toSet()
                             trainCarrierEditText.setText(
                                 carriersList.find { carrier ->
                                     carrier.id == (brandsList[0].carrier_id)
