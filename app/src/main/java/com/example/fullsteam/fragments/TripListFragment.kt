@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.*
 import com.example.fullsteam.R
 import com.example.fullsteam.firebase.FirebaseHandler
-import com.example.fullsteam.firebase.GlideApp
 import com.example.fullsteam.models.Trip
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.material.snackbar.Snackbar
@@ -81,11 +79,7 @@ class TripListFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
-//        userProfilePictureUri = sharedPref.getString(
-//            getString(R.string.firebase_user_photo_uri),
-//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
-//        ).toString()
-//        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
+
         imageView.setImageResource(R.color.ppMain)
         tripAdapter.setOnItemClickListener(object :
             TripListRecyclerViewAdapter.OnItemClickListener {
@@ -153,8 +147,6 @@ class TripListFragment : Fragment() {
             }
 
         }).attachToRecyclerView(recyclerView)
-
-
         return view
     }
 

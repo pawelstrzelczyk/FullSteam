@@ -75,11 +75,6 @@ class MainFragment : Fragment() {
             "username could not be retrieved"
         )).also { usernameText.text = it }
 
-//        userProfilePictureUri = sharedPref.getString(
-//            getString(R.string.firebase_user_photo_uri),
-//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
-//        ).toString()
-//        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
         imageView.setImageResource(R.color.ppMain)
 
 
@@ -110,8 +105,6 @@ class MainFragment : Fragment() {
 
                 val groupedCarriers = carrierList.groupingBy { it }.eachCount()
                 val groupedLongHaul = longHaulList.groupingBy { it }.eachCount()
-
-
 
                 speedSum /= trips.size
                 speedSumWithDelays /= trips.size

@@ -6,7 +6,6 @@ import android.view.animation.Animation
 fun View.startAnimation(animation: Animation, onComplete: () -> Unit) {
     animation.setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationStart(p0: Animation?) {
-
         }
 
         override fun onAnimationEnd(p0: Animation?) {
@@ -14,9 +13,7 @@ fun View.startAnimation(animation: Animation, onComplete: () -> Unit) {
         }
 
         override fun onAnimationRepeat(p0: Animation?) {
-
         }
-
     })
 
     startAnimation(animation)

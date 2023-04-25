@@ -13,7 +13,6 @@ import java.io.InputStream
 @GlideModule
 class FullSteamGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        // Register FirebaseImageLoader to handle StorageReference
         registry.append(
             StorageReference::class.java, InputStream::class.java,
             FirebaseImageLoader.Factory()

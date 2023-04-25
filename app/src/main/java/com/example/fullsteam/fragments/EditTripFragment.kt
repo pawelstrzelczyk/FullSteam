@@ -517,10 +517,6 @@ class EditTripFragment : Fragment() {
             checkboxesLayout.invalidate()
         }
 
-
-
-
-
         documentId?.let {
             database.collection("users").document(uId).collection("trips")
                 .document(documentId.toString())
@@ -625,10 +621,7 @@ class EditTripFragment : Fragment() {
                             brandsList
                         )
 
-
                         brandSpinner.adapter = brandAdapter
-
-
                     }
                 }
         }

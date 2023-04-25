@@ -73,9 +73,7 @@ class AddPhotoActivity : AppCompatActivity() {
 
     private fun takePhoto() {
 
-        // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
-        // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat("HH:mm:ss", Locale.UK)
             .format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
@@ -84,7 +82,6 @@ class AddPhotoActivity : AppCompatActivity() {
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
         }
 
-        // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(
                 contentResolver,
@@ -92,9 +89,6 @@ class AddPhotoActivity : AppCompatActivity() {
                 contentValues
             )
             .build()
-
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
 
         imageCapture.takePicture(
             outputOptions,
@@ -132,10 +126,8 @@ class AddPhotoActivity : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // Preview
             val preview = Preview.Builder()
                 .build()
                 .also {
@@ -143,22 +135,16 @@ class AddPhotoActivity : AppCompatActivity() {
                 }
             imageCapture = ImageCapture.Builder()
                 .build()
-            // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
-
-                // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
-
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
-
         }, ContextCompat.getMainExecutor(this))
     }
 

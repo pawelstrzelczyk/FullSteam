@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.fullsteam.firebase.GlideApp
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -42,21 +41,11 @@ class MainActivity : AppCompatActivity() {
             "uid could not be retrieved"
         ).toString()
 
-//        userProfilePictureUri = sharedPref.getString(
-//            getString(R.string.firebase_user_photo_uri),
-//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
-//        ).toString()
-
-//        GlideApp.with(this).load(userProfilePictureUri).into(imageToolbar)
         imageToolbar.setImageResource(R.color.ppMain)
-
 
         setSupportActionBar(mainToolbar)
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar)
         bottomNavigationView.setupWithNavController(navController)
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.app_bar_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -79,10 +67,7 @@ class MainActivity : AppCompatActivity() {
                 super.onOptionsItemSelected(item)
             }
         }
-
-
     }
-
 
     private fun signOut() {
         AuthUI.getInstance().signOut(this).addOnSuccessListener {

@@ -1,6 +1,5 @@
 package com.example.fullsteam.components
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -26,7 +25,6 @@ class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) 
         return p0.toLong()
     }
 
-    @SuppressLint("Range")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val brandItem = getItem(position)
         val itemView = convertView ?: LayoutInflater.from(context)
@@ -34,7 +32,7 @@ class BrandSpinnerAdapter(context: Context, private val brandList: List<Brand>) 
         brandItem.let {
             val brandText = itemView.findViewById<TextView>(R.id.train_brand_spinner_item_textview)
             brandText.text = brandItem.display_name
-            brandText.setTextColor(Color.parseColor(brandItem.color))
+            brandText.setTextColor(Color.parseColor(arrayListOf(brandItem.color)[0]))
 
         }
 

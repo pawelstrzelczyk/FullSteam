@@ -94,9 +94,7 @@ class TripDetailsFragment : Fragment() {
                 interpolator = AccelerateInterpolator()
 
             }
-        //trainNumber = detailsView.findViewById(R.id.details_train_number)
         trainName = detailsView.findViewById(R.id.details_train_full_name)
-        //trainBrand = detailsView.findViewById(R.id.details_train_brand)
         startStation = detailsView.findViewById(R.id.details_start_station)
         endStation = detailsView.findViewById(R.id.details_end_station)
         departureTime = detailsView.findViewById(R.id.details_departure_time)
@@ -105,7 +103,6 @@ class TripDetailsFragment : Fragment() {
         isPKM = detailsView.findViewById(R.id.details_isPKM)
         isCouchette = detailsView.findViewById(R.id.details_isCouchette)
         isChange = detailsView.findViewById(R.id.details_hasChange)
-        //tripDate = detailsView.findViewById(R.id.)
         distance = detailsView.findViewById(R.id.details_trip_distance)
         duration = detailsView.findViewById(R.id.details_trip_duration)
         price = detailsView.findViewById(R.id.details_summary_ticket_price)
@@ -167,11 +164,7 @@ class TripDetailsFragment : Fragment() {
                             }
                         }
 
-
-
                         trip = documentSnapshot.toObject(Trip::class.java)!!
-                        //trainNumber.text = trip.trainNumber.toString()
-                        //trainBrand.text = trip.trainBrand
                         trainName.text = buildString {
                             append(trip.trainBrand)
                             append("  ")
@@ -340,8 +333,6 @@ class TripDetailsFragment : Fragment() {
                             isChange.compoundDrawableTintList =
                                 ColorStateList.valueOf(Color.parseColor("#198000"))
                         }
-
-
                     } else {
                         view?.let { it1 ->
                             Snackbar.make(
@@ -353,8 +344,6 @@ class TripDetailsFragment : Fragment() {
                     }
                 }
         }
-
-
         return detailsView
     }
 

@@ -92,6 +92,7 @@ class AddTripFormFragment : Fragment() {
     private lateinit var uId: String
     private lateinit var tripDateIfPast: LocalDate
     private lateinit var imageView: ImageView
+    private var tripDistance: Double = 0.0
     private val brandsToPromote: List<String> = listOf(
         "KW",
         "IC",
@@ -126,10 +127,7 @@ class AddTripFormFragment : Fragment() {
             getString(R.string.firebase_user_uid),
             "uid could not be retrieved"
         ).toString()
-//        val userProfilePictureUri = sharedPref.getString(
-//            getString(R.string.firebase_user_photo_uri),
-//            "https://d-art.ppstatic.pl/kadry/k/r/1/48/87/60b0e7199f830_o_large.jpg"
-//        ).toString()
+
 
         val fragmentView = inflater.inflate(R.layout.fragment_add_trip_form, container, false)
         val toSaveDocumentId =
@@ -138,7 +136,6 @@ class AddTripFormFragment : Fragment() {
         imageView = requireActivity().findViewById(R.id.main_options_icon)
         imageView.setImageResource(R.color.ppMain)
 
-//        GlideApp.with(this).load(userProfilePictureUri).into(imageView)
         checkboxesLayout = fragmentView.findViewById(R.id.checkboxes_layout)
         tripDateEditText = fragmentView.findViewById(R.id.trip_date_edit_text)
         tripEndTimeText = fragmentView.findViewById(R.id.trip_end_time_text)
@@ -382,9 +379,6 @@ class AddTripFormFragment : Fragment() {
 
         }
         tripDelayText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                getTrainData()
-            }
             if (!hasFocus) {
                 if (tripDelayText.text.toString().isNotEmpty()) {
                     tripDurationSeconds = tripDelayText.text.toString().toLong() * 60
@@ -419,7 +413,7 @@ class AddTripFormFragment : Fragment() {
                         tripAvgSpeedText.setText(
                             String.format(
                                 Locale.US,
-                                "%.2f", (tripDistanceText.text.toString().toDouble() * 1000 /
+                                "%.2f", (tripDistance /
                                         Duration.ofSeconds(
                                             LocalTime.MIN.until(
                                                 LocalTime.parse(
@@ -445,9 +439,9 @@ class AddTripFormFragment : Fragment() {
 
         tripDepartureDelayText.onFocusChangeListener =
             View.OnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    getTrainData()
-                }
+//                if (hasFocus) {
+//                    getTrainData()
+//                }
                 if (!hasFocus) {
                     if (tripDepartureDelayText.text.toString().isNotEmpty()) {
                         tripDurationSeconds = tripDepartureDelayText.text.toString().toLong() * 60
@@ -486,7 +480,7 @@ class AddTripFormFragment : Fragment() {
                             tripAvgSpeedText.setText(
                                 String.format(
                                     Locale.US,
-                                    "%.2f", (tripDistanceText.text.toString().toDouble() * 1000 /
+                                    "%.2f", (tripDistance /
                                             Duration.ofSeconds(
                                                 LocalTime.MIN.until(
                                                     LocalTime.parse(
@@ -497,6 +491,7 @@ class AddTripFormFragment : Fragment() {
                                 ),
                                 TextView.BufferType.EDITABLE
                             )
+
                         }
                     } else {
                         tripDepartureDelayText.setText(
@@ -665,9 +660,9 @@ class AddTripFormFragment : Fragment() {
                             }
                             if (endAutoCompleteTextView.text.isNotEmpty()) {
                                 val hour =
-                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.hour
+                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.arrival?.hour
                                 val minute =
-                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.departure?.minute
+                                    it[0].stops.find { stop -> stop.station_name == endAutoCompleteTextView.text.toString() }?.arrival?.minute
                                 tripEndTimeText.setText(
                                     buildString {
                                         append(String.format("%02d", hour))
@@ -717,6 +712,7 @@ class AddTripFormFragment : Fragment() {
 
 
                                 val totalDistance = endDistance - startDistance
+                                tripDistance = totalDistance.toDouble()
 
                                 tripDurationSeconds =
                                     Duration.ofSeconds(
@@ -757,6 +753,8 @@ class AddTripFormFragment : Fragment() {
                                 )
                                 tripDelayText.setText("0", TextView.BufferType.EDITABLE)
                                 tripDelayText.setSelection(tripDelayText.length())
+                                tripDepartureDelayText.setText("0", TextView.BufferType.EDITABLE)
+                                tripDepartureDelayText.setSelection(tripDepartureDelayText.length())
                             }
                         }
                     }

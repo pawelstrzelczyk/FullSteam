@@ -36,15 +36,10 @@ class LoginActivity : AppCompatActivity() {
         signInButton = findViewById(R.id.login)
         backgroundImageView = findViewById(R.id.login_background_image)
 
-
-
-
         imageReference.addOnSuccessListener {
             val randomPicture = Random(LocalTime.now().nano).nextInt(it.items.size)
             GlideApp.with(this).load(it.items[randomPicture]).into(backgroundImageView)
         }
-
-
 
         signInButton.setOnClickListener {
             createSignIn()
@@ -57,14 +52,10 @@ class LoginActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             )
                 .show()
-
-
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
     }
-
 
     private fun createSignIn() {
         val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
