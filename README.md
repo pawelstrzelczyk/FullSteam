@@ -32,4 +32,4 @@ FullSteam was presented at a lecture on Information Technology course in the fie
 
 ### Demo
 
-![Login page](image\README\1682458154167.png "Login Page")![1682458332793](image/README/1682458332793.png)![1682458358492](image/README/1682458358492.png)![1682458414577](image/README/1682458414577.png)
+![Login page](image/README/1682458154167.png "Login Page")![1682458332793](image/README/1682458332793.png)![1682458358492](image/README/1682458358492.png)![1682458414577](image/README/1682458414577.png)
